@@ -43,5 +43,25 @@
       "isRead": true
     }
   ],
+  "devices": [
+    {
+      "id": "1",
+      "name": "Lavabo Baño 1",
+      "section": "Baños",
+      "status": "active",
+      "lastActive": "Hace 2 horas",
+      "alerts": 0,
+      "consumption": "800 Litros esta semana"
+    },
+    {
+      "id": "2",
+      "name": "Lavabo Baño 2",
+      "section": "Baños",
+      "status": "active",
+      "lastActive": "Hace 6 horas",
+      "alerts": 2,
+      "consumption": "352 Litros esta semana"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
