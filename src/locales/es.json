@@ -24,13 +24,13 @@
     "notFound": "Página no encontrada"
   },
   "profile": {
-    "personalInfo": "Informacion personal",
+    "personalInfo": "Información personal",
     "edit": "Editar",
     "loading": "Cargando perfil...",
-    "address": "Direccion",
-    "addressPlaceholder": "Agrega tu direccion",
-    "phoneNumber": "Numero telefonico",
-    "phonePlaceholder": "Agrega tu numero",
+    "address": "Dirección",
+    "addressPlaceholder": "Agrega tu dirección",
+    "phoneNumber": "Número telefónico",
+    "phonePlaceholder": "Agrega tu número",
     "photoUrl": "Foto (URL)",
     "photoPlaceholder": "Pega el enlace de la imagen",
     "save": "Guardar cambios",
@@ -40,5 +40,24 @@
     "localNote": "Los cambios se guardan en este navegador porque no hay backend.",
     "editPhoto": "Editar foto",
     "photoModalTitle": "Pon el link acá"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "loading": "Cargando notificaciones...",
+    "empty": "No tienes notificaciones nuevas.",
+    "read": "Leída",
+    "unread": "No leída",
+    "close": "Cerrar",
+    "refresh": "Actualizar",
+    "items": {
+      "energy": {
+        "title": "Ahorro de energía logrado",
+        "message": "Ahorraste 15% de energía este mes comparado con el mes pasado."
+      },
+      "maintenance": {
+        "title": "Mantenimiento de dispositivo",
+        "message": "El Smart Fan en el dormitorio principal necesita mantenimiento."
+      }
+    }
   }
 }
