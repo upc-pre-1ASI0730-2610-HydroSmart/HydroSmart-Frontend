@@ -40,5 +40,24 @@
     "localNote": "Changes are saved in this browser because there is no backend.",
     "editPhoto": "Edit photo",
     "photoModalTitle": "Paste the link here"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "loading": "Loading notifications...",
+    "empty": "You have no new notifications.",
+    "read": "Read",
+    "unread": "Unread",
+    "close": "Close",
+    "refresh": "Refresh",
+    "items": {
+      "energy": {
+        "title": "Energy savings achieved",
+        "message": "You saved 15% energy this month compared to last month."
+      },
+      "maintenance": {
+        "title": "Device maintenance",
+        "message": "Smart Fan in Master Bedroom needs maintenance."
+      }
+    }
   }
 }

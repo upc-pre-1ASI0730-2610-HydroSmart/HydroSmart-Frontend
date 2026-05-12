@@ -7,7 +7,7 @@
       "email": "yeirahuaman@gmail.com",
       "firstName": "Yeira",
       "lastName": "Huaman",
-      "address": "Av. Gral. Salaverry 2255, San Isidro 15076",
+      "address": "Av. Gral. Salaverry 2255, San Isidro 15076666",
       "phoneNumber": "+51 987654321",
       "profilePhotoUrl": "https://i.postimg.cc/mDh1YMph/waefasefse.jpg",
       "createdAt": "2025-10-01T10:00:00Z"
@@ -23,6 +23,24 @@
       "phoneNumber": "+51 912345678",
       "profilePhotoUrl": "https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2F0aXRvfGVufDB8fDB8fHww",
       "createdAt": "2025-10-01T10:00:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "title": "notifications.items.energy.title",
+      "message": "notifications.items.energy.message",
+      "type": "success",
+      "timestamp": "2026-05-04T12:00:00Z",
+      "isRead": true
+    },
+    {
+      "id": 2,
+      "title": "notifications.items.maintenance.title",
+      "message": "notifications.items.maintenance.message",
+      "type": "warning",
+      "timestamp": "2026-05-04T10:30:00Z",
+      "isRead": true
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
