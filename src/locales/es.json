@@ -1,0 +1,25 @@
+{
+  "app": {
+    "logoAlt": "Logo de HydroSmart",
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "devices": "Dispositivos",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "logout": "Salir",
+    "greeting": "Hola",
+    "userName": "Nombre",
+    "languageSwitchToEn": "EN",
+    "languageSwitchToEs": "ES",
+    "notifications": "Notificaciones",
+    "avatarAlt": "Foto de perfil"
+  },
+  "views": {
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "devices": "Dispositivos",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "notFound": "Página no encontrada"
+  }
+}

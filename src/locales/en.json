@@ -1,0 +1,25 @@
+{
+  "app": {
+    "logoAlt": "HydroSmart logo",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "devices": "Devices",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Sign out",
+    "greeting": "Hello",
+    "userName": "Name",
+    "languageSwitchToEn": "EN",
+    "languageSwitchToEs": "ES",
+    "notifications": "Notifications",
+    "avatarAlt": "Profile photo"
+  },
+  "views": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "devices": "Devices",
+    "reports": "Reports",
+    "settings": "Settings",
+    "notFound": "Page not found"
+  }
+}
