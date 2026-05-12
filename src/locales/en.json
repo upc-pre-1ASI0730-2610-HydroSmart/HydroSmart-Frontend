@@ -59,5 +59,19 @@
         "message": "Smart Fan in Master Bedroom needs maintenance."
       }
     }
+  },
+  "devices": {
+    "title": "My Devices",
+    "loading": "Loading devices...",
+    "realTimeStatus": "Real-time status",
+    "lastActive": "Last active",
+    "alertsHistory": "Alerts history",
+    "energyConsumption": "Energy Consumption",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noAlerts": "No alerts",
+    "viewAlerts": "View {count} alerts",
+    "preferences": "Preferences",
+    "addDevice": "Add Device"
   }
 }

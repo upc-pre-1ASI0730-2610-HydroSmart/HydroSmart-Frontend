@@ -59,5 +59,20 @@
         "message": "El Smart Fan en el dormitorio principal necesita mantenimiento."
       }
     }
+  },
+  "devices": {
+    "title": "Mis Dispositivos",
+    "loading": "Cargando dispositivos...",
+    "realTimeStatus": "Estado en tiempo real",
+    "lastActive": "Última vez activo",
+    "alertsHistory": "Historial de alertas",
+    "energyConsumption": "Consumo de Energía",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "noAlerts": "Sin alertas",
+    "viewAlerts": "Ver {count} alertas",
+    "preferences": "Preferencias",
+    "addDevice": "Añadir Disp.",
+    "section": "Sección"
   }
 }
