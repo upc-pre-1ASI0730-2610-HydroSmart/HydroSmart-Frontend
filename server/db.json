@@ -27,7 +27,7 @@
   ],
   "notifications": [
     {
-      "id": 1,
+      "id": "1",
       "title": "notifications.items.energy.title",
       "message": "notifications.items.energy.message",
       "type": "success",
@@ -35,7 +35,7 @@
       "isRead": true
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "notifications.items.maintenance.title",
       "message": "notifications.items.maintenance.message",
       "type": "warning",
