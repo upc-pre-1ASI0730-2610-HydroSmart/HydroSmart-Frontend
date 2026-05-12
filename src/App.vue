@@ -2,10 +2,17 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, RouterView } from 'vue-router'
+import { useProfileStore } from './profiles/application/profile.store.js'
 
 const { t, locale } = useI18n()
 const now = ref(new Date())
 const userName = computed(() => t('app.userName'))
+
+const { profile, loadProfile } = useProfileStore()
+const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
+
+const displayName = computed(() => profile.value?.fullName || userName.value)
+const displayPhoto = computed(() => profile.value?.profilePhotoUrl || '')
 
 let timerId
 const formattedDate = computed(() => {
@@ -34,6 +41,8 @@ onMounted(() => {
   timerId = window.setInterval(() => {
     now.value = new Date()
   }, 1000)
+
+  loadProfile(profileId)
 })
 
 onUnmounted(() => {
@@ -78,7 +87,7 @@ onUnmounted(() => {
         </div>
 
         <div class="topbar__actions">
-          <span class="topbar__greeting">{{ t('app.greeting') }}, <strong>{{ userName }}</strong></span>
+          <span class="topbar__greeting">{{ t('app.greeting') }}, <strong>{{ displayName }}</strong></span>
           <button class="icon-button" type="button" :aria-label="t('app.notifications')">
             <svg class="icon-bell" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -87,7 +96,13 @@ onUnmounted(() => {
               />
             </svg>
           </button>
-          <div class="avatar" role="img" :aria-label="t('app.avatarAlt')"></div>
+          <img
+            v-if="displayPhoto"
+            class="avatar avatar--photo"
+            :src="displayPhoto"
+            :alt="displayName"
+          />
+          <div v-else class="avatar" role="img" :aria-label="t('app.avatarAlt')"></div>
           <button class="lang-toggle" type="button" @click="toggleLocale">
             <span :class="['lang-toggle__option', { 'is-active': isEs }]">{{ t('app.languageSwitchToEs') }}</span>
             <span class="lang-toggle__separator">|</span>
@@ -228,6 +243,12 @@ onUnmounted(() => {
   border-radius: 50%;
   height: 36px;
   width: 36px;
+}
+
+.avatar--photo {
+  object-fit: cover;
+  border: 1px solid #d1d5db;
+  background: #e5e7eb;
 }
 
 .lang-toggle {

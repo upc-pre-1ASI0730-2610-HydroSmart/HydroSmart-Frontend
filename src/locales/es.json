@@ -17,9 +17,28 @@
   "views": {
     "dashboard": "Dashboard",
     "profile": "Perfil",
+    "profileTitle": "Mi perfil",
     "devices": "Dispositivos",
     "reports": "Reportes",
     "settings": "Configuración",
     "notFound": "Página no encontrada"
+  },
+  "profile": {
+    "personalInfo": "Informacion personal",
+    "edit": "Editar",
+    "loading": "Cargando perfil...",
+    "address": "Direccion",
+    "addressPlaceholder": "Agrega tu direccion",
+    "phoneNumber": "Numero telefonico",
+    "phonePlaceholder": "Agrega tu numero",
+    "photoUrl": "Foto (URL)",
+    "photoPlaceholder": "Pega el enlace de la imagen",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "saved": "Perfil actualizado",
+    "localNote": "Los cambios se guardan en este navegador porque no hay backend.",
+    "editPhoto": "Editar foto",
+    "photoModalTitle": "Pon el link acá"
   }
 }

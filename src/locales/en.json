@@ -17,9 +17,28 @@
   "views": {
     "dashboard": "Dashboard",
     "profile": "Profile",
+    "profileTitle": "My profile",
     "devices": "Devices",
     "reports": "Reports",
     "settings": "Settings",
     "notFound": "Page not found"
+  },
+  "profile": {
+    "personalInfo": "Personal information",
+    "edit": "Edit",
+    "loading": "Loading profile...",
+    "address": "Address",
+    "addressPlaceholder": "Add your address",
+    "phoneNumber": "Phone number",
+    "phonePlaceholder": "Add your phone number",
+    "photoUrl": "Photo (URL)",
+    "photoPlaceholder": "Paste the image link",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "saved": "Profile updated",
+    "localNote": "Changes are saved in this browser because there is no backend.",
+    "editPhoto": "Edit photo",
+    "photoModalTitle": "Paste the link here"
   }
 }
