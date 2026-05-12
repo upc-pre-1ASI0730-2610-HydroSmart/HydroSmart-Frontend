@@ -4,11 +4,11 @@
       <h1 class="page-title">{{ t('devices.title') }}</h1>
 
       <div class="header-actions">
-        <button class="outline-button" type="button">
+        <button class="outline-button primary" type="button" @click="openPreferences">
           + {{ t('devices.preferences') }}
         </button>
 
-        <button class="outline-button" type="button">
+        <button class="outline-button" type="button" @click="openAddDevice">
           + {{ t('devices.addDevice') }}
         </button>
       </div>
@@ -23,11 +23,7 @@
     </div>
 
     <div v-else class="devices-list">
-      <article
-          v-for="device in devices"
-          :key="device.id"
-          class="device-card"
-      >
+      <article v-for="device in devices" :key="device.id" class="device-card">
         <div class="device-section">
           <p class="device-label">{{ device.name }}</p>
           <span>{{ t('devices.section') }}: {{ device.section }}</span>
@@ -37,9 +33,7 @@
 
         <div class="device-section">
           <p class="device-label">{{ t('devices.realTimeStatus') }}</p>
-          <span>
-            {{ device.isActive ? t('devices.active') : t('devices.inactive') }}
-          </span>
+          <span>{{ device.isActive ? t('devices.active') : t('devices.inactive') }}</span>
         </div>
 
         <div class="divider"></div>
@@ -66,16 +60,10 @@
 
         <div class="device-section">
           <p class="device-label">{{ t('devices.energyConsumption') }}</p>
-          <span>
-            {{ t('devices.litersPerWeek', { count: device.consumption }) }}
-          </span>
+          <span>{{ t('devices.litersPerWeek', { count: device.consumption }) }}</span>
         </div>
 
-        <button
-            class="settings-button"
-            type="button"
-            :aria-label="t('devices.settings')"
-        >
+        <button class="settings-button" type="button" :aria-label="t('devices.settings')" @click="openSettings(device)">
           <svg class="settings-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path
                 d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.2 7.2 0 0 0-1.69-.98L14.5 2.42A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42L9.12 5.07c-.61.24-1.18.56-1.69.98l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.32-.07.65-.07.98s.02.66.07.98l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .6.22l2.49-1c.51.4 1.08.74 1.69.98l.38 2.65A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.61-.24 1.18-.56 1.69-.98l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65ZM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5Z"
@@ -85,14 +73,36 @@
         </button>
       </article>
     </div>
+
+    <DevicePreferencesModal v-if="isPreferencesOpen" @close="closePreferences" />
+
+    <DeviceFormModal
+        v-if="isAddDeviceOpen"
+        :is-saving="isSaving"
+        :save-error="saveError"
+        @close="closeAddDevice"
+        @save="handleAddDevice"
+    />
+
+    <DeviceSettingsModal
+        v-if="isSettingsOpen"
+        :device="selectedDevice"
+        :is-saving="isSaving"
+        :save-error="saveError"
+        @close="closeSettings"
+        @save="handleUpdateDevice"
+    />
   </section>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useDeviceStore } from '../../application/device.store.js'
+import DeviceFormModal from '../components/device-form-modal.vue'
+import DeviceSettingsModal from '../components/device-settings-modal.vue'
+import DevicePreferencesModal from '../components/device-preferences-modal.vue'
 
 const { t } = useI18n()
 
@@ -100,8 +110,53 @@ const {
   devices,
   isLoading,
   error,
-  loadDevices
+  isSaving,
+  saveError,
+  loadDevices,
+  addDevice,
+  updateDevice
 } = useDeviceStore()
+
+const isPreferencesOpen = ref(false)
+const isAddDeviceOpen = ref(false)
+const isSettingsOpen = ref(false)
+const selectedDevice = ref(null)
+
+const openPreferences = () => {
+  isPreferencesOpen.value = true
+}
+
+const closePreferences = () => {
+  isPreferencesOpen.value = false
+}
+
+const openAddDevice = () => {
+  isAddDeviceOpen.value = true
+}
+
+const closeAddDevice = () => {
+  isAddDeviceOpen.value = false
+}
+
+const openSettings = (device) => {
+  selectedDevice.value = device
+  isSettingsOpen.value = true
+}
+
+const closeSettings = () => {
+  selectedDevice.value = null
+  isSettingsOpen.value = false
+}
+
+const handleAddDevice = async (payload) => {
+  await addDevice(payload)
+  closeAddDevice()
+}
+
+const handleUpdateDevice = async ({ id, updates }) => {
+  await updateDevice(id, updates)
+  closeSettings()
+}
 
 onMounted(() => {
   loadDevices()
@@ -138,6 +193,12 @@ onMounted(() => {
   cursor: pointer;
   font-size: 1rem;
   padding: 0.75rem 1.2rem;
+}
+
+.outline-button.primary {
+  background: #0f7bc2;
+  border-color: #0f7bc2;
+  color: #ffffff;
 }
 
 .devices-list {
