@@ -59,5 +59,52 @@
         "message": "El Smart Fan en el dormitorio principal necesita mantenimiento."
       }
     }
+  },
+  "devices":{
+    "title": "Mis Dispositivos",
+    "loading": "Cargando dispositivos...",
+    "section": "Sección",
+    "realTimeStatus": "Estado en tiempo real",
+    "lastActive": "Última vez activo",
+    "alertsHistory": "Historial de alertas",
+    "energyConsumption": "Consumo de Agua",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "noAlerts": "Sin alertas",
+    "viewAlerts": "Ver {count} alerta | Ver {count} alertas",
+    "preferences": "Preferencias",
+    "addDevice": "Añadir Disp.",
+    "settings": "Configuración del dispositivo",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "saved": "Dispositivo actualizado",
+    "litersPerWeek": "{count} litros esta semana",
+    "preferencesTitle": "Preferencia de Monitoreo de Dispositivos",
+    "resetPreferences": "Restablecer Preferencias",
+    "savePreferences": "Guardar Preferencias",
+    "form": {
+      "name": "Nombre",
+      "section": "Sección",
+      "status": "Estado",
+      "lastActive": "Última actividad",
+      "alerts": "Alertas",
+      "consumption": "Consumo semanal en litros"
+    },
+    "preferencesItems": {
+      "waterMonitoring": "Encender Monitoreo de Agua",
+      "highConsumptionAlerts": "Recibir alertas de consumo alto",
+      "includePowerTime": "Incluir Potencia y Tiempo en los reportes",
+      "monitorResources": "Monitorear Recursos Mayores",
+      "monitorAllPipes": "Monitorear todos los caños",
+      "autoBlockKeys": "Bloquear las llaves automáticamente",
+      "advancedReports": "Incluir Reportes Avanzados",
+      "hydraulicPower": "Registrar potencia hidráulica",
+      "dailyEmailReports": "Reportes diarios por correo electrónico",
+      "weeklyProgress": "Reporte de Progreso Semanal",
+      "savingAutomations": "Sugerir automatizaciones de ahorro",
+      "leakAlerts": "Alertas por posibles fugas de agua"
+    }
   }
 }

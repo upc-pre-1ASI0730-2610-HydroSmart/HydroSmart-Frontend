@@ -27,7 +27,7 @@
   ],
   "notifications": [
     {
-      "id": 1,
+      "id": "1",
       "title": "notifications.items.energy.title",
       "message": "notifications.items.energy.message",
       "type": "success",
@@ -35,12 +35,41 @@
       "isRead": true
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "notifications.items.maintenance.title",
       "message": "notifications.items.maintenance.message",
       "type": "warning",
       "timestamp": "2026-05-04T10:30:00Z",
       "isRead": true
+    }
+  ],
+  "devices": [
+    {
+      "id": "1",
+      "name": "Bathroom Sink 1",
+      "section": "Bathroom",
+      "status": "active",
+      "lastActive": "2 h",
+      "alerts": 0,
+      "consumption": 800
+    },
+    {
+      "id": "2",
+      "name": "Bathroom Sink 2",
+      "section": "Bathroom",
+      "status": "active",
+      "lastActive": "6 h",
+      "alerts": 2,
+      "consumption": 352
+    },
+    {
+      "id": "3",
+      "name": "Kitchen Sink 1",
+      "section": "Kitchen",
+      "status": "inactive",
+      "lastActive": "10 h",
+      "alerts": 1,
+      "consumption": 527
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

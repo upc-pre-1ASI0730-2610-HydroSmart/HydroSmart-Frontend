@@ -59,5 +59,52 @@
         "message": "Smart Fan in Master Bedroom needs maintenance."
       }
     }
+  },
+  "devices": {
+    "title": "My Devices",
+    "loading": "Loading devices...",
+    "section": "Section",
+    "realTimeStatus": "Real-time status",
+    "lastActive": "Last active",
+    "alertsHistory": "Alert history",
+    "energyConsumption": "Water Consumption",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noAlerts": "No alerts",
+    "viewAlerts": "View {count} alert | View {count} alerts",
+    "preferences": "Preferences",
+    "addDevice": "Add Device",
+    "settings": "Device settings",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "saved": "Device updated",
+    "litersPerWeek": "{count} liters this week",
+    "preferencesTitle": "Device Monitoring Preferences",
+    "resetPreferences": "Reset Preferences",
+    "savePreferences": "Save Preferences",
+    "form": {
+      "name": "Name",
+      "section": "Section",
+      "status": "Status",
+      "lastActive": "Last activity",
+      "alerts": "Alerts",
+      "consumption": "Weekly consumption in liters"
+    },
+    "preferencesItems": {
+      "waterMonitoring": "Enable Water Monitoring",
+      "highConsumptionAlerts": "Receive high consumption alerts",
+      "includePowerTime": "Include Power and Time in reports",
+      "monitorResources": "Monitor Major Resources",
+      "monitorAllPipes": "Monitor all faucets",
+      "autoBlockKeys": "Automatically lock valves",
+      "advancedReports": "Include Advanced Reports",
+      "hydraulicPower": "Register hydraulic power",
+      "dailyEmailReports": "Daily email reports",
+      "weeklyProgress": "Weekly Progress Report",
+      "savingAutomations": "Suggest saving automations",
+      "leakAlerts": "Alerts for possible water leaks"
+    }
   }
 }
