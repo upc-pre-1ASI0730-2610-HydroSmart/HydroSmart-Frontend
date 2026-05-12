@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, RouterView } from 'vue-router'
 import { useProfileStore } from './profiles/application/profile.store.js'
+import { useNotificationStore } from './notifications/application/notificacion.store.js'
 
 const { t, locale } = useI18n()
 const now = ref(new Date())
@@ -13,6 +14,9 @@ const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
 
 const displayName = computed(() => profile.value?.fullName || userName.value)
 const displayPhoto = computed(() => profile.value?.profilePhotoUrl || '')
+
+const isNotificationsOpen = ref(false)
+const { notifications, isLoading: isNotificationsLoading, error: notificationsError, loadNotifications } = useNotificationStore()
 
 let timerId
 const formattedDate = computed(() => {
@@ -36,6 +40,51 @@ const toggleLocale = () => {
 }
 
 const isEs = computed(() => locale.value === 'es')
+
+const formatTimestamp = (value) => {
+  if (!value) {
+    return ''
+  }
+
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
+
+  return new Intl.DateTimeFormat(locale.value, {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: 'short'
+  }).format(date)
+}
+
+const openNotifications = async () => {
+  if (!isNotificationsOpen.value) {
+    await loadNotifications()
+  }
+
+  isNotificationsOpen.value = true
+}
+
+const closeNotifications = () => {
+  isNotificationsOpen.value = false
+}
+
+const toggleNotifications = async () => {
+  if (isNotificationsOpen.value) {
+    closeNotifications()
+  } else {
+    await openNotifications()
+  }
+}
+
+const onOverlayClick = (event) => {
+  if (event.target === event.currentTarget) {
+    closeNotifications()
+  }
+}
 
 onMounted(() => {
   timerId = window.setInterval(() => {
@@ -88,14 +137,57 @@ onUnmounted(() => {
 
         <div class="topbar__actions">
           <span class="topbar__greeting">{{ t('app.greeting') }}, <strong>{{ displayName }}</strong></span>
-          <button class="icon-button" type="button" :aria-label="t('app.notifications')">
-            <svg class="icon-bell" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2Z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+          <div class="notifications">
+            <button
+              class="icon-button"
+              type="button"
+              :aria-label="t('app.notifications')"
+              :aria-expanded="isNotificationsOpen"
+              @click="toggleNotifications"
+            >
+              <svg class="icon-bell" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <div v-if="isNotificationsOpen" class="notifications-overlay" @click="onOverlayClick">
+              <div class="notifications-panel" role="dialog" aria-live="polite">
+                <div class="notifications-panel__header">
+                  <h3 class="notifications-panel__title">{{ t('notifications.title') }}</h3>
+                  <button class="icon-button" type="button" :aria-label="t('notifications.close')" @click="closeNotifications">
+                    <span aria-hidden="true">✕</span>
+                  </button>
+                </div>
+                <div class="notifications-panel__body">
+                  <p v-if="isNotificationsLoading" class="notifications-panel__empty">
+                    {{ t('notifications.loading') }}
+                  </p>
+                  <p v-else-if="notificationsError" class="notifications-panel__empty">
+                    {{ notificationsError }}
+                  </p>
+                  <p v-else-if="!notifications.length" class="notifications-panel__empty">
+                    {{ t('notifications.empty') }}
+                  </p>
+                  <div v-else class="notifications-list">
+                    <article v-for="item in notifications" :key="item.id" class="notifications-item" :class="`is-${item.type}`">
+                      <div class="notifications-item__main">
+                        <p class="notifications-item__title">{{ t(item.title) }}</p>
+                        <p class="notifications-item__message">{{ t(item.message) }}</p>
+                      </div>
+                      <div class="notifications-item__meta">
+                        <span class="notifications-item__status">
+                          {{ item.isRead ? t('notifications.read') : t('notifications.unread') }}
+                        </span>
+                        <span class="notifications-item__time">{{ formatTimestamp(item.timestamp) }}</span>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <img
             v-if="displayPhoto"
             class="avatar avatar--photo"
@@ -216,10 +308,11 @@ onUnmounted(() => {
   align-items: center;
   display: flex;
   gap: 0.75rem;
+  position: relative;
 }
 
-.topbar__greeting {
-  font-weight: 600;
+.notifications {
+  position: relative;
 }
 
 .icon-button {
@@ -234,8 +327,111 @@ onUnmounted(() => {
 }
 
 .icon-bell {
+  color: #0f172a;
+  display: block;
   height: 20px;
   width: 20px;
+}
+
+.notifications-overlay {
+  align-items: center;
+  background: rgba(15, 23, 42, 0.2);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 50;
+}
+
+.notifications-panel {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.2);
+  margin: 0;
+  max-height: calc(100vh - 120px);
+  overflow: hidden;
+  width: min(520px, calc(100vw - 48px));
+}
+
+.notifications-panel__header {
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+}
+
+.notifications-panel__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.notifications-panel__body {
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.notifications-panel__empty {
+  color: #475569;
+  margin: 0;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notifications-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+}
+
+.notifications-item__title {
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+}
+
+.notifications-item__message {
+  color: #475569;
+  margin: 0;
+}
+
+.notifications-item__meta {
+  color: #64748b;
+  display: flex;
+  font-size: 0.85rem;
+  justify-content: space-between;
+}
+
+.notifications-item__status {
+  font-weight: 600;
+}
+
+.notifications-item.is-success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.notifications-item.is-warning {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.notifications-item.is-info {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.notifications-item.is-error {
+  border-color: #fecaca;
+  background: #fef2f2;
 }
 
 .avatar {
