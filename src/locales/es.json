@@ -62,17 +62,18 @@
   },
   "devices": {
     "title": "Mis Dispositivos",
+    "section": "Sección",
     "loading": "Cargando dispositivos...",
     "realTimeStatus": "Estado en tiempo real",
     "lastActive": "Última vez activo",
     "alertsHistory": "Historial de alertas",
-    "energyConsumption": "Consumo de Energía",
+    "energyConsumption": "Consumo de Agua",
     "active": "Activo",
     "inactive": "Inactivo",
     "noAlerts": "Sin alertas",
     "viewAlerts": "Ver {count} alertas",
+    "litersPerWeek": "{count} L/semana",
     "preferences": "Preferencias",
-    "addDevice": "Añadir Dispositivo",
-    "section": "Sección"
+    "addDevice": "Añadir Dispositivo"
   }
 }

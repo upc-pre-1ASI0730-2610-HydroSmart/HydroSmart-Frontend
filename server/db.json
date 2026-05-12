@@ -46,21 +46,30 @@
   "devices": [
     {
       "id": "1",
-      "name": "Lavabo Baño 1",
-      "section": "Baños",
+      "name": "Bathroom Sink 1",
+      "section": "Bathroom",
       "status": "active",
-      "lastActive": "Hace 2 horas",
+      "lastActive": "2 h",
       "alerts": 0,
-      "consumption": "800 Litros esta semana"
+      "consumption": 800
     },
     {
       "id": "2",
-      "name": "Lavabo Baño 2",
-      "section": "Baños",
+      "name": "Bathroom Sink 2",
+      "section": "Bathroom",
       "status": "active",
-      "lastActive": "Hace 6 horas",
+      "lastActive": "6 h",
       "alerts": 2,
-      "consumption": "352 Litros esta semana"
+      "consumption": 352
+    },
+    {
+      "id": "3",
+      "name": "Kitchen Sink 1",
+      "section": "Kitchen",
+      "status": "inactive",
+      "lastActive": "10 h",
+      "alerts": 1,
+      "consumption": 527
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -62,15 +62,17 @@
   },
   "devices": {
     "title": "My Devices",
+    "section": "Section",
     "loading": "Loading devices...",
     "realTimeStatus": "Real-time status",
     "lastActive": "Last active",
     "alertsHistory": "Alerts history",
-    "energyConsumption": "Energy Consumption",
+    "energyConsumption": "Water Consumption",
     "active": "Active",
     "inactive": "Inactive",
     "noAlerts": "No alerts",
     "viewAlerts": "View {count} alerts",
+    "litersPerWeek": "{count} L/week",
     "preferences": "Preferences",
     "addDevice": "Add Device"
   }
