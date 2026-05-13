@@ -12,7 +12,11 @@
     "languageSwitchToEn": "EN",
     "languageSwitchToEs": "ES",
     "notifications": "Notificaciones",
-    "avatarAlt": "Foto de perfil"
+    "avatarAlt": "Foto de perfil",
+    "consumption": "Consumo",
+    "unit": {
+      "liters": "Litros"
+    }
   },
   "views": {
     "dashboard": "Dashboard",
@@ -42,12 +46,7 @@
     "photoModalTitle": "Pon el link acá"
   },
   "notifications": {
-    "title": "Notificaciones y alertas",
-    "highConsumption": "Alertas de Consumo Elevado",
-    "summary": "Resumen Diario/Semanal",
-    "schedule": "Horario de notificaciones",
-    "edit": "Editar",
-    "scheduleEdit": "Editar horario de notificaciones",
+    "title": "Notificaciones",
     "loading": "Cargando notificaciones...",
     "empty": "No tienes notificaciones nuevas.",
     "read": "Leída",
@@ -110,6 +109,37 @@
       "weeklyProgress": "Reporte de Progreso Semanal",
       "savingAutomations": "Sugerir automatizaciones de ahorro",
       "leakAlerts": "Alertas por posibles fugas de agua"
+    }
+  },
+  "dashboard": {
+    "waterConsumption": "Consumo de agua",
+    "monthlySavingGoal": "Monthly saving goal",
+    "estimatedSavings": "Ahorros estimados",
+    "activeDevices": "Dispositivos activos",
+    "estimatedBill": "Factura Estimada",
+    "todayConsumption": "Consumo de hoy",
+    "dailyWaterConsumption": "Consumo diario de agua",
+    "consumptionByCategory": "Consumo de agua por categoría",
+    "monthlyConsumption": "Consumo Mensual",
+    "comparison": "Comparación",
+    "alerts": "Alertas",
+    "myDevices": "Mis dispositivos",
+    "highConsumptionDetected": "Consumo alto detectado!",
+    "highConsumptionMessage": "Tu uso actual del agua ha superado en 20% a tu cantidad promedio diaria.",
+    "reminderTitle": "Recordatorio:",
+    "reminderMessage": "Es probable que hayas dejado el caño del 'Lavabo 1' abierto.",
+    "categories": {
+      "showers": "Duchas",
+      "toilets": "Inodoros",
+      "filters": "Filtros",
+      "others": "Otros",
+      "faucets": "Lavabos"
+    },
+    "devices": {
+      "faucet1": "Lavabo 1",
+      "shower3": "Ducha 3",
+      "kitchenFaucet1": "Lavabo de Cocina 1",
+      "status": "Estado"
     }
   },
   "reports": {
