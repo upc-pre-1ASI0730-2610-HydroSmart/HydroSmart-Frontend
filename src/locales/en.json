@@ -110,7 +110,7 @@
   "settings": {
     "title": "My Settings",
     "autoMode": {
-      "title": "Auto Saving Mode",
+      "title": "Auto Saving Mode.",
       "closeValves": "Close valves when active for more than 50 mins",
       "blockAll": "Lock all valves when you leave home",
       "block20": "Lock valves when exceeding 20% of estimated consumption",
