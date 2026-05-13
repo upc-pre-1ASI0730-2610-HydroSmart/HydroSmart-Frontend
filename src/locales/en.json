@@ -140,6 +140,11 @@
       "contact": "Support contact",
       "tutorials": "Tutorials & guides"
     },
+    "security": {
+      "title": "Security & Privacy",
+      "changePassword": "Change password",
+      "twoFactor": "Two-factor authentication"
+    },
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Data saved successfully",

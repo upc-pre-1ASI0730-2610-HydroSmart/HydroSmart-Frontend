@@ -42,6 +42,22 @@
           <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
         </div>
       </div>
+      <!-- Seguridad y Privacidad -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <span>{{ t('settings.security.title') }}</span>
+        </div>
+        <div class="security-list">
+          <div class="security-row">
+            <div class="security-label">{{ t('settings.security.changePassword') }}</div>
+            <button class="small-edit-btn">{{ t('settings.edit') }}</button>
+          </div>
+          <div class="security-row">
+            <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
+            <button class="small-edit-btn">{{ t('settings.edit') }}</button>
+          </div>
+        </div>
+      </div>
       <!-- Notificaciones y alertas -->
       <div class="settings-card">
         <div class="settings-card-header">
@@ -338,6 +354,30 @@ onBeforeUnmount(() => {
   color: #0a6eb8;
   text-decoration: underline;
   font-size: 0.98rem;
+}
+.security-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.security-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+.security-label {
+  font-size: 0.98rem;
+  color: #223;
+}
+.small-edit-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.22rem 0.8rem;
+  font-size: 0.88rem;
+  cursor: pointer;
 }
 .settings-add-btn {
   background: #0a2c47;

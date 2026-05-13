@@ -150,5 +150,10 @@
       "contact": "Contacto de soporte",
       "tutorials": "Tutoriales y guías"
     }
+    ,"security": {
+      "title": "Seguridad y Privacidad",
+      "changePassword": "Cambiar Contraseña",
+      "twoFactor": "Autenticación de dos factores"
+    }
   }
 }
