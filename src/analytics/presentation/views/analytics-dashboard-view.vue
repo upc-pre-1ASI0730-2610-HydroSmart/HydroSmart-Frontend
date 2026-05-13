@@ -15,7 +15,7 @@
         <div class="metric-card__icon">🎯</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.estimatedSavings') }}</p>
-          <p class="metric-card__value">-15%</p>
+          <p class="metric-card__value">-25%</p>
           <p class="metric-card__subtitle">{{ t('app.consumption') }}</p>
         </div>
       </div>
