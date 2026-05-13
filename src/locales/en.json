@@ -116,11 +116,6 @@
       "block20": "Lock valves when exceeding 20% of estimated consumption",
       "reduceIntensity": "Reduce water intensity during overconsumption"
     },
-    "save": "Save",
-    "cancel": "Cancel",
-    "saved": "Data saved successfully",
-    "cancelConfirm": "Are you sure you want to cancel?",
-    "no": "No",
     "notifications": {
       "title": "Notifications and alerts",
       "highConsumption": "High Consumption Alerts",
@@ -128,6 +123,11 @@
       "schedule": "Notification schedule",
       "edit": "Edit",
       "scheduleEdit": "Edit notification schedule"
-    }
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Data saved successfully",
+    "cancelConfirm": "Are you sure you want to cancel?",
+    "no": "No"
   }
 }

@@ -125,6 +125,14 @@
     "cancel": "Cancelar",
     "saved": "Datos guardados correctamente",
     "cancelConfirm": "¿Seguro que deseas cancelar?",
-    "no": "No"
+    "no": "No",
+    "notifications": {
+      "title": "Notificaciones y alertas",
+      "highConsumption": "Alertas de Consumo Elevado",
+      "summary": "Resumen Diario/Semanal",
+      "schedule": "Horario de notificaciones",
+      "edit": "Editar",
+      "scheduleEdit": "Editar horario de notificaciones"
+    }
   }
 }
