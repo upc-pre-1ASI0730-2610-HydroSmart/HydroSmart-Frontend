@@ -136,9 +136,9 @@
            <span>{{ t('settings.help.title') }}</span>
          </div>
          <div class="help-list">
-           <a class="help-link" href="#">{{ t('settings.help.center') }}</a>
-           <a class="help-link" href="#">{{ t('settings.help.contact') }}</a>
-           <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
+            <router-link class="help-link" to="/help">{{ t('settings.help.center') }}</router-link>
+            <router-link class="help-link" to="/help/contact">{{ t('settings.help.contact') }}</router-link>
+            <router-link class="help-link" to="/help/tutorials">{{ t('settings.help.tutorials') }}</router-link>
          </div>
        </div>
      </div>
