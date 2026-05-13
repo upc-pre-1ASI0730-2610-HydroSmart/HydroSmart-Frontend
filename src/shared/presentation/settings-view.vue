@@ -31,6 +31,17 @@
           </label>
         </div>
       </div>
+      <!-- Ayuda y Soporte -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <span>{{ t('settings.help.title') }}</span>
+        </div>
+        <div class="help-list">
+          <a class="help-link" href="#">{{ t('settings.help.center') }}</a>
+          <a class="help-link" href="#">{{ t('settings.help.contact') }}</a>
+          <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
+        </div>
+      </div>
       <!-- Notificaciones y alertas -->
       <div class="settings-card">
         <div class="settings-card-header">
@@ -317,6 +328,16 @@ onBeforeUnmount(() => {
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
+}
+.help-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.help-link {
+  color: #0a6eb8;
+  text-decoration: underline;
+  font-size: 0.98rem;
 }
 .settings-add-btn {
   background: #0a2c47;

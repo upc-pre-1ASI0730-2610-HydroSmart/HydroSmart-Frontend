@@ -144,5 +144,11 @@
       "monthly": "Mensual",
       "format": "Formato"
     }
+    ,"help": {
+      "title": "Ayuda y Soporte",
+      "center": "Centro de Ayuda y preguntas frecuentes",
+      "contact": "Contacto de soporte",
+      "tutorials": "Tutoriales y guías"
+    }
   }
 }

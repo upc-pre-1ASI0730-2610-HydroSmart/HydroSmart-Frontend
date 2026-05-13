@@ -134,6 +134,12 @@
       "monthly": "Monthly",
       "format": "Format"
     },
+    "help": {
+      "title": "Help & Support",
+      "center": "Help Center and FAQ",
+      "contact": "Support contact",
+      "tutorials": "Tutorials & guides"
+    },
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Data saved successfully",
