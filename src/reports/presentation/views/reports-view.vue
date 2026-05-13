@@ -496,7 +496,7 @@ const handleDownload = () => {
   font-size: 0.88rem;
   padding: 0.45rem 0.85rem;
   color: #0f172a;
-  width: 230px;
+  width: 231px;
 }
 
 .export-field__input:focus { outline: 2px solid #3b82f6; outline-offset: 1px; }

@@ -42,7 +42,12 @@
     "photoModalTitle": "Pon el link acá"
   },
   "notifications": {
-    "title": "Notificaciones",
+    "title": "Notificaciones y alertas",
+    "highConsumption": "Alertas de Consumo Elevado",
+    "summary": "Resumen Diario/Semanal",
+    "schedule": "Horario de notificaciones",
+    "edit": "Editar",
+    "scheduleEdit": "Editar horario de notificaciones",
     "loading": "Cargando notificaciones...",
     "empty": "No tienes notificaciones nuevas.",
     "read": "Leída",
@@ -60,7 +65,7 @@
       }
     }
   },
-  "devices":{
+  "devices": {
     "title": "Mis Dispositivos",
     "loading": "Cargando dispositivos...",
     "section": "Sección",
@@ -133,9 +138,76 @@
       "total": "Total hasta ahora",
       "lastMonth": "Último mes",
       "lastWeek": "Semana pasada",
-      "download": "Descargar",
-      "emailPlaceholder": "tu@correo.com",
-      "send": "Enviar Reporte"
+      "download": "Descargar"
     }
+  },
+  "settings": {
+    "title": "Mi Configuración",
+    "autoMode": {
+      "title": "Modo de ahorro automático",
+      "closeValves": "Cerrar llaves cuando están activas por más de 50 mins",
+      "blockAll": "Bloquear todas las llaves cuando salgas de casa",
+      "block20": "Bloquear llaves al superar un 20% el consumo estimado",
+      "reduceIntensity": "Reducir intensidad del agua en momentos de sobreconsumo"
+    },
+    "notifications": {
+      "title": "Notificaciones y alertas",
+      "highConsumption": "Alertas de Consumo Elevado",
+      "summary": "Resumen Diario/Semanal",
+      "schedule": "Horario de notificaciones",
+      "edit": "Editar",
+      "scheduleEdit": "Editar horario de notificaciones",
+      "start": "Inicio",
+      "end": "Fin"
+    },
+    "reports": {
+      "title": "Reportes personalizados",
+      "frequency": "Frecuencia de Reportes",
+      "daily": "Diario",
+      "weekly": "Semanal",
+      "monthly": "Mensual",
+      "format": "Formato"
+    },
+    "help": {
+      "title": "Ayuda y Soporte",
+      "center": "Centro de Ayuda y preguntas frecuentes",
+      "contact": "Contacto de soporte",
+      "tutorials": "Tutoriales y guías"
+    },
+    "security": {
+      "title": "Seguridad y Privacidad",
+      "changePassword": "Cambiar Contraseña",
+      "twoFactor": "Autenticación de dos factores",
+      "changePasswordBtn": "Cambiar",
+      "twoFactorBtn": "Activar",
+      "twoFactorModalTitle": "Autenticación en dos pasos",
+      "twoFactorModalDescription": "Activa la verificación en dos pasos para añadir una capa extra de seguridad a tu cuenta.",
+      "twoFactorChoose": "Selecciona un método",
+      "twoFactorAuthenticator": "Aplicación autenticadora (Google Authenticator, Authy)",
+      "twoFactorSMS": "Código por SMS",
+      "twoFactorAuthenticatorDesc": "Genera códigos temporales desde una app autenticadora.",
+      "twoFactorSMSDesc": "Recibirás códigos vía SMS en tu teléfono.",
+      "phoneNumber": "Número telefónico",
+      "phonePlaceholder": "+52 123 456 7890",
+      "enableTwoFactorBtn": "Habilitar 2FA",
+      "twoFactorPhoneError": "Ingresa un número válido para recibir el SMS.",
+      "passwordModalTitle": "Cambiar contraseña",
+      "passwordModalDescription": "Actualiza tu contraseña desde esta ventana emergente sin salir de la página.",
+      "currentPassword": "Contraseña actual",
+      "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Ingresa la nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelve a escribir la nueva contraseña",
+      "savePasswordBtn": "Guardar contraseña",
+      "passwordRequired": "Completa todos los campos.",
+      "passwordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden."
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Datos guardados correctamente",
+    "cancelConfirm": "¿Seguro que deseas cancelar?",
+    "no": "No"
   }
 }

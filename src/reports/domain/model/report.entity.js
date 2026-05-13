@@ -7,3 +7,4 @@ export class Report {
     this.type = type;
   }
 }
+//

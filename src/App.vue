@@ -17,7 +17,7 @@ const displayPhoto = computed(() => profile.value?.profilePhotoUrl || '')
 
 const isNotificationsOpen = ref(false)
 const { notifications, isLoading: isNotificationsLoading, error: notificationsError, loadNotifications } = useNotificationStore()
-
+//
 let timerId
 const formattedDate = computed(() => {
   return new Intl.DateTimeFormat(locale.value, {

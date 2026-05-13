@@ -10,7 +10,7 @@ export const reportAssembler = {
       data.type
     );
   },
-
+///
   toDTO(report) {
     return {
       id: report.id,
