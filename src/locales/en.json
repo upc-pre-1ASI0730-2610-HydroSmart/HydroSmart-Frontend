@@ -64,6 +64,85 @@
       }
     }
   },
+   "devices": {
+     "title": "My Devices",
+     "loading": "Loading devices...",
+     "section": "Section",
+     "realTimeStatus": "Real-time status",
+     "lastActive": "Last active",
+     "alertsHistory": "Alert history",
+     "energyConsumption": "Water Consumption",
+     "active": "Active",
+     "inactive": "Inactive",
+     "noAlerts": "No alerts",
+     "viewAlerts": "View {count} alert | View {count} alerts",
+     "preferences": "Preferences",
+     "addDevice": "Add Device",
+     "settings": "Device settings",
+     "save": "Save changes",
+     "saving": "Saving...",
+     "cancel": "Cancel",
+     "edit": "Edit",
+     "saved": "Device updated",
+     "litersPerWeek": "{count} liters this week",
+     "preferencesTitle": "Device Monitoring Preferences",
+     "resetPreferences": "Reset Preferences",
+     "savePreferences": "Save Preferences",
+     "form": {
+       "name": "Name",
+       "section": "Section",
+       "status": "Status",
+       "lastActive": "Last activity",
+       "alerts": "Alerts",
+       "consumption": "Weekly consumption in liters"
+     },
+     "preferencesItems": {
+       "waterMonitoring": "Enable Water Monitoring",
+       "highConsumptionAlerts": "Receive high consumption alerts",
+       "includePowerTime": "Include Power and Time in reports",
+       "monitorResources": "Monitor Major Resources",
+       "monitorAllPipes": "Monitor all faucets",
+       "autoBlockKeys": "Automatically lock valves",
+       "advancedReports": "Include Advanced Reports",
+       "hydraulicPower": "Register hydraulic power",
+       "dailyEmailReports": "Daily email reports",
+       "weeklyProgress": "Weekly Progress Report",
+       "savingAutomations": "Suggest saving automations",
+       "leakAlerts": "Alerts for possible water leaks"
+     }
+   },
+   "dashboard": {
+     "waterConsumption": "Water consumption",
+     "monthlySavingGoal": "Monthly saving goal",
+     "estimatedSavings": "Estimated savings",
+     "activeDevices": "Active devices",
+     "estimatedBill": "Estimated Bill",
+     "todayConsumption": "Today's consumption",
+     "dailyWaterConsumption": "Daily water consumption",
+     "consumptionByCategory": "Water consumption by category",
+     "monthlyConsumption": "Monthly Consumption",
+     "comparison": "Comparison",
+     "alerts": "Alerts",
+     "myDevices": "My devices",
+     "highConsumptionDetected": "High consumption detected!",
+     "highConsumptionMessage": "Your current water usage has exceeded 20% of your average daily amount.",
+     "reminderTitle": "Reminder:",
+     "reminderMessage": "It's likely you left the 'Faucet 1' tap open.",
+     "categories": {
+       "showers": "Showers",
+       "toilets": "Toilets",
+       "filters": "Filters",
+       "others": "Others",
+       "faucets": "Faucets"
+     },
+     "devices": {
+       "faucet1": "Faucet 1",
+       "shower3": "Shower 3",
+       "kitchenFaucet1": "Kitchen Faucet 1",
+       "status": "Status"
+     }
+   }
+ }
   "devices": {
     "title": "My Devices",
     "loading": "Loading devices...",
