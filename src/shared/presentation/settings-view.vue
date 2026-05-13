@@ -30,36 +30,9 @@
             {{ t('settings.autoMode.reduceIntensity') }}
           </label>
         </div>
-      </div>
-      <!-- Ayuda y Soporte -->
-      <div class="settings-card">
-        <div class="settings-card-header">
-          <span>{{ t('settings.help.title') }}</span>
-        </div>
-        <div class="help-list">
-          <a class="help-link" href="#">{{ t('settings.help.center') }}</a>
-          <a class="help-link" href="#">{{ t('settings.help.contact') }}</a>
-          <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
-        </div>
-      </div>
-      <!-- Seguridad y Privacidad -->
-      <div class="settings-card">
-        <div class="settings-card-header">
-          <span>{{ t('settings.security.title') }}</span>
-        </div>
-        <div class="security-list">
-          <div class="security-row">
-            <div class="security-label">{{ t('settings.security.changePassword') }}</div>
-            <button class="small-edit-btn">{{ t('settings.edit') }}</button>
-          </div>
-          <div class="security-row">
-            <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
-            <button class="small-edit-btn">{{ t('settings.edit') }}</button>
-          </div>
-        </div>
-      </div>
-      <!-- Notificaciones y alertas -->
-      <div class="settings-card">
+       </div>
+       <!-- Notificaciones y alertas -->
+       <div class="settings-card">
         <div class="settings-card-header">
           <span>{{ t('settings.notifications.title') }}</span>
         </div>
@@ -138,11 +111,38 @@
               <button :class="['pill', { active: reportFormat === 'PDF' }]" @click="setFormat('PDF')">PDF</button>
               <button :class="['pill', { active: reportFormat === 'CSV' }]" @click="setFormat('CSV')">CSV</button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="settings-actions">
+           </div>
+         </div>
+       </div>
+       <!-- Seguridad y Privacidad -->
+       <div class="settings-card">
+         <div class="settings-card-header">
+           <span>{{ t('settings.security.title') }}</span>
+         </div>
+         <div class="security-list">
+           <div class="security-row">
+             <div class="security-label">{{ t('settings.security.changePassword') }}</div>
+             <button class="security-edit-badge">{{ t('settings.edit') }}</button>
+           </div>
+           <div class="security-row">
+             <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
+             <button class="security-edit-badge">{{ t('settings.edit') }}</button>
+           </div>
+         </div>
+       </div>
+       <!-- Ayuda y Soporte -->
+       <div class="settings-card">
+         <div class="settings-card-header">
+           <span>{{ t('settings.help.title') }}</span>
+         </div>
+         <div class="help-list">
+           <a class="help-link" href="#">{{ t('settings.help.center') }}</a>
+           <a class="help-link" href="#">{{ t('settings.help.contact') }}</a>
+           <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
+         </div>
+       </div>
+     </div>
+     <div class="settings-actions">
       <button class="settings-save" @click="onSave">{{ t('settings.save') }}</button>
       <button class="settings-cancel" @click="onCancel">{{ t('settings.cancel') }}</button>
     </div>
@@ -370,14 +370,15 @@ onBeforeUnmount(() => {
   font-size: 0.98rem;
   color: #223;
 }
-.small-edit-btn {
+.security-edit-badge {
   background: #111;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  padding: 0.22rem 0.8rem;
-  font-size: 0.88rem;
+  border-radius: 6px;
+  padding: 0.24rem 0.7rem;
+  font-size: 0.78rem;
   cursor: pointer;
+  font-weight: 500;
 }
 .settings-add-btn {
   background: #0a2c47;
