@@ -96,7 +96,7 @@
             </div>
           </div>
           <div class="alert-item alert-item--warning">
-            <span class="alert-icon">💧</span>
+            <span class="alert-icon">⚠️</span>
             <div class="alert-content">
               <p class="alert-heading">Posible fuga detectada</p>
               <p class="alert-message">Se ha detectado un patrón de consumo anormal en el Inodoro 2. Verifica si hay fugas de agua.</p>
