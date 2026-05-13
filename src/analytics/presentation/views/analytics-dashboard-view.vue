@@ -288,7 +288,7 @@ const initializeMonthlyConsumptionChart = () => {
       datasets: [
         {
           label: 'Consumo (Litros)',
-          data: [3500, 4200, 3800, 2800],
+          data: [3500, 4200, 3200, 2800],
           backgroundColor: [
             '#60a5fa',
             '#3b82f6',
