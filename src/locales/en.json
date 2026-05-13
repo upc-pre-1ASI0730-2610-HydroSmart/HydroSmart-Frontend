@@ -126,6 +126,14 @@
       "start": "Start",
       "end": "End"
     },
+    "reports": {
+      "title": "Custom reports",
+      "frequency": "Report frequency",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "format": "Format"
+    },
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Data saved successfully",

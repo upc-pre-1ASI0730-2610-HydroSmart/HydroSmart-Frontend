@@ -136,5 +136,13 @@
       ,"start": "Inicio",
       "end": "Fin"
     }
+    ,"reports": {
+      "title": "Reportes personalizados",
+      "frequency": "Frecuencia de Reportes",
+      "daily": "Diario",
+      "weekly": "Semanal",
+      "monthly": "Mensual",
+      "format": "Formato"
+    }
   }
 }

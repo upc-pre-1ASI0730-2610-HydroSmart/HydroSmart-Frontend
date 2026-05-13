@@ -92,6 +92,27 @@
             </div>
           </div>
         </div>
+
+        <!-- Reportes personalizados (dentro de la misma tarjeta) -->
+        <div class="settings-divider" />
+        <div class="reports-section">
+          <h3 class="reports-title">{{ t('settings.reports.title') }}</h3>
+          <div class="report-row">
+            <div class="report-label">{{ t('settings.reports.frequency') }}</div>
+            <div class="pills">
+              <button :class="['pill', { active: reportFrequency === 'daily' }]" @click="setFrequency('daily')">{{ t('settings.reports.daily') }}</button>
+              <button :class="['pill', { active: reportFrequency === 'weekly' }]" @click="setFrequency('weekly')">{{ t('settings.reports.weekly') }}</button>
+              <button :class="['pill', { active: reportFrequency === 'monthly' }]" @click="setFrequency('monthly')">{{ t('settings.reports.monthly') }}</button>
+            </div>
+          </div>
+          <div class="report-row">
+            <div class="report-label">{{ t('settings.reports.format') }}</div>
+            <div class="pills">
+              <button :class="['pill', { active: reportFormat === 'PDF' }]" @click="setFormat('PDF')">PDF</button>
+              <button :class="['pill', { active: reportFormat === 'CSV' }]" @click="setFormat('CSV')">CSV</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="settings-actions">
@@ -130,7 +151,9 @@ const initialState = {
   reduceIntensity: true,
   alertasConsumo: true,
   resumen: true,
-  horario: '05:00 AM - 22:00 PM'
+  horario: '05:00 AM - 22:00 PM',
+  reportFrequency: 'monthly',
+  reportFormat: 'PDF'
 }
 const autoClose = ref(initialState.autoClose)
 const blockAll = ref(initialState.blockAll)
@@ -157,6 +180,9 @@ const startAmpm = ref('AM')
 const endHour = ref('10')
 const endMin = ref('00')
 const endAmpm = ref('PM')
+// Reportes personalizados
+const reportFrequency = ref(initialState.reportFrequency)
+const reportFormat = ref(initialState.reportFormat)
 
 function pad2(n) {
   return String(n).padStart(2, '0')
@@ -196,6 +222,8 @@ function onSave() {
   initialState.alertasConsumo = alertasConsumo.value
   initialState.resumen = resumen.value
   initialState.horario = horario.value
+  initialState.reportFrequency = reportFrequency.value
+  initialState.reportFormat = reportFormat.value
 }
 
 function onCancel() {
@@ -210,6 +238,8 @@ function confirmCancel() {
   alertasConsumo.value = initialState.alertasConsumo
   resumen.value = initialState.resumen
   horario.value = initialState.horario
+  reportFrequency.value = initialState.reportFrequency
+  reportFormat.value = initialState.reportFormat
   showModal.value = false
 }
 
@@ -230,6 +260,14 @@ function editarHorario() {
 function guardarHorario() {
   horario.value = `${startHour.value}:${startMin.value} ${startAmpm.value} - ${endHour.value}:${endMin.value} ${endAmpm.value}`
   showHorarioModal.value = false
+}
+
+function setFrequency(f) {
+  reportFrequency.value = f
+}
+
+function setFormat(f) {
+  reportFormat.value = f
 }
 
 function onDocClick(e) {
@@ -328,6 +366,49 @@ onBeforeUnmount(() => {
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
+}
+.settings-divider {
+  height: 1px;
+  background: #e6f0fb;
+  margin: 0.9rem 0;
+}
+.reports-section {
+  padding-top: 0.2rem;
+}
+.reports-title {
+  font-size: 1.05rem;
+  margin: 0 0 0.6rem 0;
+  font-weight: 600;
+}
+.report-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+.report-label {
+  min-width: 140px;
+  color: #233;
+  font-size: 0.95rem;
+}
+.pills {
+  display: flex;
+  gap: 0.45rem;
+}
+.pill {
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #cbdff0;
+  background: #fff;
+  color: #0a2c47;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.pill.active {
+  background: #0a2c47;
+  color: #fff;
+  border-color: #0a2c47;
 }
 .settings-save {
   background: #0a2c47;
