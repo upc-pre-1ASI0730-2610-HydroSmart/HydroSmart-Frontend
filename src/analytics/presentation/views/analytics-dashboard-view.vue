@@ -24,7 +24,7 @@
         <div class="metric-card__icon">⚙️</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.activeDevices') }}</p>
-          <p class="metric-card__value">3 {{ t('app.devices') }}</p>
+          <p class="metric-card__value">5 {{ t('app.devices') }}</p>
           <p class="metric-card__subtitle">&nbsp;</p>
         </div>
       </div>
