@@ -65,7 +65,7 @@
       }
     }
   },
-  "devices":{
+  "devices": {
     "title": "Mis Dispositivos",
     "loading": "Cargando dispositivos...",
     "section": "Sección",
@@ -112,6 +112,35 @@
       "leakAlerts": "Alertas por posibles fugas de agua"
     }
   },
+  "reports": {
+    "title": "Reportes",
+    "pageTitle": "Mis reportes",
+    "pageSubtitle": "Resumen de métricas",
+    "loading": "Cargando reportes...",
+    "error": "Error al cargar reportes",
+    "noReports": "No hay reportes disponibles",
+    "type": "Tipo",
+    "date": "Fecha",
+    "description": "Descripción",
+    "deviceRanking": "Ranking de dispositivos",
+    "deviceNote": "Tu top 3 dispositivos con más uso representan el 55% del consumo de agua total de este mes.",
+    "weeklyAvg": "Promedio de Consumo Semanal",
+    "weeklyAvgLegend": "Promedio Semanal",
+    "weeklyNote": "Tu consumo esta semana es un 20% menor al de la semana pasada, ¡sigue así para ahorrar más!",
+    "banner": {
+      "goodMonth": "¡Gran mes!",
+      "goodMonthDesc": "Reduciste tu consumo en un 12% el mes pasado, logrando ahorrar S/24.",
+      "tip": "Consejo: Comprobar activamente el funcionamiento de las tuberías hidráulicas, ayudarte a evitar derrames inesperados."
+    },
+    "export": {
+      "title": "Exportar Reporte",
+      "format": "Formato a Exportar",
+      "total": "Total hasta ahora",
+      "lastMonth": "Último mes",
+      "lastWeek": "Semana pasada",
+      "download": "Descargar"
+    }
+  },
   "settings": {
     "title": "Mi Configuración",
     "autoMode": {
@@ -121,64 +150,276 @@
       "block20": "Bloquear llaves al superar un 20% el consumo estimado",
       "reduceIntensity": "Reducir intensidad del agua en momentos de sobreconsumo"
     },
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "saved": "Datos guardados correctamente",
-    "cancelConfirm": "¿Seguro que deseas cancelar?",
-    "no": "No",
     "notifications": {
       "title": "Notificaciones y alertas",
       "highConsumption": "Alertas de Consumo Elevado",
       "summary": "Resumen Diario/Semanal",
       "schedule": "Horario de notificaciones",
       "edit": "Editar",
-      "scheduleEdit": "Editar horario de notificaciones"
-      ,"start": "Inicio",
+      "scheduleEdit": "Editar horario de notificaciones",
+      "start": "Inicio",
       "end": "Fin"
-    }
-    ,"reports": {
+    },
+    "reports": {
       "title": "Reportes personalizados",
       "frequency": "Frecuencia de Reportes",
       "daily": "Diario",
       "weekly": "Semanal",
       "monthly": "Mensual",
       "format": "Formato"
+    },
+    "help": {
+      "title": "Ayuda y Soporte",
+      "center": "Centro de Ayuda y preguntas frecuentes",
+      "contact": "Contacto de soporte",
+      "tutorials": "Tutoriales y guías"
+    },
+    "security": {
+      "title": "Seguridad y Privacidad",
+      "changePassword": "Cambiar Contraseña",
+      "twoFactor": "Autenticación de dos factores",
+      "changePasswordBtn": "Cambiar",
+      "twoFactorBtn": "Activar",
+      "twoFactorModalTitle": "Autenticación en dos pasos",
+      "twoFactorModalDescription": "Activa la verificación en dos pasos para añadir una capa extra de seguridad a tu cuenta.",
+      "twoFactorChoose": "Selecciona un método",
+      "twoFactorAuthenticator": "Aplicación autenticadora (Google Authenticator, Authy)",
+      "twoFactorSMS": "Código por SMS",
+      "twoFactorAuthenticatorDesc": "Genera códigos temporales desde una app autenticadora.",
+      "twoFactorSMSDesc": "Recibirás códigos vía SMS en tu teléfono.",
+      "phoneNumber": "Número telefónico",
+      "phonePlaceholder": "+52 123 456 7890",
+      "enableTwoFactorBtn": "Habilitar 2FA",
+      "twoFactorPhoneError": "Ingresa un número válido para recibir el SMS.",
+      "passwordModalTitle": "Cambiar contraseña",
+      "passwordModalDescription": "Actualiza tu contraseña desde esta ventana emergente sin salir de la página.",
+      "currentPassword": "Contraseña actual",
+      "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Ingresa la nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelve a escribir la nueva contraseña",
+      "savePasswordBtn": "Guardar contraseña",
+      "passwordRequired": "Completa todos los campos.",
+      "passwordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden."
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Datos guardados correctamente",
+    "cancelConfirm": "¿Seguro que deseas cancelar?",
+    "no": "No"
+  }
+}{
+  "app": {
+    "logoAlt": "Logo de HydroSmart",
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "devices": "Dispositivos",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "logout": "Salir",
+    "greeting": "Hola",
+    "userName": "Nombre",
+    "languageSwitchToEn": "EN",
+    "languageSwitchToEs": "ES",
+    "notifications": "Notificaciones",
+    "avatarAlt": "Foto de perfil"
+  },
+  "views": {
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "profileTitle": "Mi perfil",
+    "devices": "Dispositivos",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "notFound": "Página no encontrada"
+  },
+  "profile": {
+    "personalInfo": "Información personal",
+    "edit": "Editar",
+    "loading": "Cargando perfil...",
+    "address": "Dirección",
+    "addressPlaceholder": "Agrega tu dirección",
+    "phoneNumber": "Número telefónico",
+    "phonePlaceholder": "Agrega tu número",
+    "photoUrl": "Foto (URL)",
+    "photoPlaceholder": "Pega el enlace de la imagen",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "saved": "Perfil actualizado",
+    "localNote": "Los cambios se guardan en este navegador porque no hay backend.",
+    "editPhoto": "Editar foto",
+    "photoModalTitle": "Pon el link acá"
+  },
+  "notifications": {
+    "title": "Notificaciones y alertas",
+    "highConsumption": "Alertas de Consumo Elevado",
+    "summary": "Resumen Diario/Semanal",
+    "schedule": "Horario de notificaciones",
+    "edit": "Editar",
+    "scheduleEdit": "Editar horario de notificaciones",
+    "loading": "Cargando notificaciones...",
+    "empty": "No tienes notificaciones nuevas.",
+    "read": "Leída",
+    "unread": "No leída",
+    "close": "Cerrar",
+    "refresh": "Actualizar",
+    "items": {
+      "energy": {
+        "title": "Ahorro de energía logrado",
+        "message": "Ahorraste 15% de energía este mes comparado con el mes pasado."
+      },
+      "maintenance": {
+        "title": "Mantenimiento de dispositivo",
+        "message": "El Smart Fan en el dormitorio principal necesita mantenimiento."
+      }
     }
-     ,"help": {
-       "title": "Ayuda y Soporte",
-       "center": "Centro de Ayuda y preguntas frecuentes",
-       "contact": "Contacto de soporte",
-       "tutorials": "Tutoriales y guías"
-     }
-     ,"security": {
-       "title": "Seguridad y Privacidad",
-       "changePassword": "Cambiar Contraseña",
-       "twoFactor": "Autenticación de dos factores",
-       "changePasswordBtn": "Cambiar",
-       "twoFactorBtn": "Activar",
-        "twoFactorModalTitle": "Autenticación en dos pasos",
-        "twoFactorModalDescription": "Activa la verificación en dos pasos para añadir una capa extra de seguridad a tu cuenta.",
-        "twoFactorChoose": "Selecciona un método",
-        "twoFactorAuthenticator": "Aplicación autenticadora (Google Authenticator, Authy)",
-        "twoFactorSMS": "Código por SMS",
-        "twoFactorAuthenticatorDesc": "Genera códigos temporales desde una app autenticadora.",
-        "twoFactorSMSDesc": "Recibirás códigos vía SMS en tu teléfono.",
-        "phoneNumber": "Número telefónico",
-        "phonePlaceholder": "+52 123 456 7890",
-        "enableTwoFactorBtn": "Habilitar 2FA",
-        "twoFactorPhoneError": "Ingresa un número válido para recibir el SMS.",
-       "passwordModalTitle": "Cambiar contraseña",
-       "passwordModalDescription": "Actualiza tu contraseña desde esta ventana emergente sin salir de la página.",
-       "currentPassword": "Contraseña actual",
-       "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
-       "newPassword": "Nueva contraseña",
-       "newPasswordPlaceholder": "Ingresa la nueva contraseña",
-       "confirmPassword": "Confirmar contraseña",
-       "confirmPasswordPlaceholder": "Vuelve a escribir la nueva contraseña",
-       "savePasswordBtn": "Guardar contraseña",
-       "passwordRequired": "Completa todos los campos.",
-       "passwordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
-       "passwordMismatch": "Las contraseñas no coinciden."
-     }
+  },
+  "devices": {
+    "title": "Mis Dispositivos",
+    "loading": "Cargando dispositivos...",
+    "section": "Sección",
+    "realTimeStatus": "Estado en tiempo real",
+    "lastActive": "Última vez activo",
+    "alertsHistory": "Historial de alertas",
+    "energyConsumption": "Consumo de Agua",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "noAlerts": "Sin alertas",
+    "viewAlerts": "Ver {count} alerta | Ver {count} alertas",
+    "preferences": "Preferencias",
+    "addDevice": "Añadir Disp.",
+    "settings": "Configuración del dispositivo",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "saved": "Dispositivo actualizado",
+    "litersPerWeek": "{count} litros esta semana",
+    "preferencesTitle": "Preferencia de Monitoreo de Dispositivos",
+    "resetPreferences": "Restablecer Preferencias",
+    "savePreferences": "Guardar Preferencias",
+    "form": {
+      "name": "Nombre",
+      "section": "Sección",
+      "status": "Estado",
+      "lastActive": "Última actividad",
+      "alerts": "Alertas",
+      "consumption": "Consumo semanal en litros"
+    },
+    "preferencesItems": {
+      "waterMonitoring": "Encender Monitoreo de Agua",
+      "highConsumptionAlerts": "Recibir alertas de consumo alto",
+      "includePowerTime": "Incluir Potencia y Tiempo en los reportes",
+      "monitorResources": "Monitorear Recursos Mayores",
+      "monitorAllPipes": "Monitorear todos los caños",
+      "autoBlockKeys": "Bloquear las llaves automáticamente",
+      "advancedReports": "Incluir Reportes Avanzados",
+      "hydraulicPower": "Registrar potencia hidráulica",
+      "dailyEmailReports": "Reportes diarios por correo electrónico",
+      "weeklyProgress": "Reporte de Progreso Semanal",
+      "savingAutomations": "Sugerir automatizaciones de ahorro",
+      "leakAlerts": "Alertas por posibles fugas de agua"
+    }
+  },
+  "reports": {
+    "title": "Reportes",
+    "pageTitle": "Mis reportes",
+    "pageSubtitle": "Resumen de métricas",
+    "loading": "Cargando reportes...",
+    "error": "Error al cargar reportes",
+    "noReports": "No hay reportes disponibles",
+    "type": "Tipo",
+    "date": "Fecha",
+    "description": "Descripción",
+    "deviceRanking": "Ranking de dispositivos",
+    "deviceNote": "Tu top 3 dispositivos con más uso representan el 55% del consumo de agua total de este mes.",
+    "weeklyAvg": "Promedio de Consumo Semanal",
+    "weeklyAvgLegend": "Promedio Semanal",
+    "weeklyNote": "Tu consumo esta semana es un 20% menor al de la semana pasada, ¡sigue así para ahorrar más!",
+    "banner": {
+      "goodMonth": "¡Gran mes!",
+      "goodMonthDesc": "Reduciste tu consumo en un 12% el mes pasado, logrando ahorrar S/24.",
+      "tip": "Consejo: Comprobar activamente el funcionamiento de las tuberías hidráulicas, ayudarte a evitar derrames inesperados."
+    },
+    "export": {
+      "title": "Exportar Reporte",
+      "format": "Formato a Exportar",
+      "total": "Total hasta ahora",
+      "lastMonth": "Último mes",
+      "lastWeek": "Semana pasada",
+      "download": "Descargar"
+    }
+  },
+  "settings": {
+    "title": "Mi Configuración",
+    "autoMode": {
+      "title": "Modo de ahorro automático",
+      "closeValves": "Cerrar llaves cuando están activas por más de 50 mins",
+      "blockAll": "Bloquear todas las llaves cuando salgas de casa",
+      "block20": "Bloquear llaves al superar un 20% el consumo estimado",
+      "reduceIntensity": "Reducir intensidad del agua en momentos de sobreconsumo"
+    },
+    "notifications": {
+      "title": "Notificaciones y alertas",
+      "highConsumption": "Alertas de Consumo Elevado",
+      "summary": "Resumen Diario/Semanal",
+      "schedule": "Horario de notificaciones",
+      "edit": "Editar",
+      "scheduleEdit": "Editar horario de notificaciones",
+      "start": "Inicio",
+      "end": "Fin"
+    },
+    "reports": {
+      "title": "Reportes personalizados",
+      "frequency": "Frecuencia de Reportes",
+      "daily": "Diario",
+      "weekly": "Semanal",
+      "monthly": "Mensual",
+      "format": "Formato"
+    },
+    "help": {
+      "title": "Ayuda y Soporte",
+      "center": "Centro de Ayuda y preguntas frecuentes",
+      "contact": "Contacto de soporte",
+      "tutorials": "Tutoriales y guías"
+    },
+    "security": {
+      "title": "Seguridad y Privacidad",
+      "changePassword": "Cambiar Contraseña",
+      "twoFactor": "Autenticación de dos factores",
+      "changePasswordBtn": "Cambiar",
+      "twoFactorBtn": "Activar",
+      "twoFactorModalTitle": "Autenticación en dos pasos",
+      "twoFactorModalDescription": "Activa la verificación en dos pasos para añadir una capa extra de seguridad a tu cuenta.",
+      "twoFactorChoose": "Selecciona un método",
+      "twoFactorAuthenticator": "Aplicación autenticadora (Google Authenticator, Authy)",
+      "twoFactorSMS": "Código por SMS",
+      "twoFactorAuthenticatorDesc": "Genera códigos temporales desde una app autenticadora.",
+      "twoFactorSMSDesc": "Recibirás códigos vía SMS en tu teléfono.",
+      "phoneNumber": "Número telefónico",
+      "phonePlaceholder": "+52 123 456 7890",
+      "enableTwoFactorBtn": "Habilitar 2FA",
+      "twoFactorPhoneError": "Ingresa un número válido para recibir el SMS.",
+      "passwordModalTitle": "Cambiar contraseña",
+      "passwordModalDescription": "Actualiza tu contraseña desde esta ventana emergente sin salir de la página.",
+      "currentPassword": "Contraseña actual",
+      "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Ingresa la nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelve a escribir la nueva contraseña",
+      "savePasswordBtn": "Guardar contraseña",
+      "passwordRequired": "Completa todos los campos.",
+      "passwordMinLength": "La nueva contraseña debe tener al menos 6 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden."
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Datos guardados correctamente",
+    "cancelConfirm": "¿Seguro que deseas cancelar?",
+    "no": "No"
   }
 }
