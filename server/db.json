@@ -72,5 +72,21 @@
       "consumption": 527
     }
   ],
+  "reports": [
+    {
+      "id": "1",
+      "title": "Monthly Water Usage Report",
+      "description": "Summary of water consumption for the month of May 2026.",
+      "date": "2026-05-01",
+      "type": "consumption"
+    },
+    {
+      "id": "2",
+      "title": "Device Maintenance Report",
+      "description": "Report on device statuses and maintenance needs.",
+      "date": "2026-05-10",
+      "type": "maintenance"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

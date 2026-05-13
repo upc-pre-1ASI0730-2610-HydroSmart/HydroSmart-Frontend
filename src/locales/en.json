@@ -143,3 +143,180 @@
      }
    }
  }
+  "devices": {
+    "title": "My Devices",
+    "loading": "Loading devices...",
+    "section": "Section",
+    "realTimeStatus": "Real-time status",
+    "lastActive": "Last active",
+    "alertsHistory": "Alert history",
+    "energyConsumption": "Water Consumption",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noAlerts": "No alerts",
+    "viewAlerts": "View {count} alert | View {count} alerts",
+    "preferences": "Preferences",
+    "addDevice": "Add Device",
+    "settings": "Device settings",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "saved": "Device updated",
+    "litersPerWeek": "{count} liters this week",
+    "preferencesTitle": "Device Monitoring Preferences",
+    "resetPreferences": "Reset Preferences",
+    "savePreferences": "Save Preferences",
+    "form": {
+      "name": "Name",
+      "section": "Section",
+      "status": "Status",
+      "lastActive": "Last activity",
+      "alerts": "Alerts",
+      "consumption": "Weekly consumption in liters"
+    },
+    "preferencesItems": {
+      "waterMonitoring": "Enable Water Monitoring",
+      "highConsumptionAlerts": "Receive high consumption alerts",
+      "includePowerTime": "Include Power and Time in reports",
+      "monitorResources": "Monitor Major Resources",
+      "monitorAllPipes": "Monitor all faucets",
+      "autoBlockKeys": "Automatically lock valves",
+      "advancedReports": "Include Advanced Reports",
+      "hydraulicPower": "Register hydraulic power",
+      "dailyEmailReports": "Daily email reports",
+      "weeklyProgress": "Weekly Progress Report",
+      "savingAutomations": "Suggest saving automations",
+      "leakAlerts": "Alerts for possible water leaks"
+    }
+  },
+  "dashboard": {
+    "waterConsumption": "Water consumption",
+    "monthlySavingGoal": "Monthly saving goal",
+    "estimatedSavings": "Estimated savings",
+    "activeDevices": "Active devices",
+    "estimatedBill": "Estimated Bill",
+    "todayConsumption": "Today's consumption",
+    "dailyWaterConsumption": "Daily water consumption",
+    "consumptionByCategory": "Water consumption by category",
+    "monthlyConsumption": "Monthly Consumption",
+    "comparison": "Comparison",
+    "alerts": "Alerts",
+    "myDevices": "My devices",
+    "highConsumptionDetected": "High consumption detected!",
+    "highConsumptionMessage": "Your current water usage has exceeded 20% of your average daily amount.",
+    "reminderTitle": "Reminder:",
+    "reminderMessage": "It's likely you left the 'Faucet 1' tap open.",
+    "categories": {
+      "showers": "Showers",
+      "toilets": "Toilets",
+      "filters": "Filters",
+      "others": "Others",
+      "faucets": "Faucets"
+    },
+    "devices": {
+      "faucet1": "Faucet 1",
+      "shower3": "Shower 3",
+      "kitchenFaucet1": "Kitchen Faucet 1",
+      "status": "Status"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "pageTitle": "My reports",
+    "pageSubtitle": "Metrics summary",
+    "loading": "Loading reports...",
+    "error": "Error loading reports",
+    "noReports": "No reports available",
+    "type": "Type",
+    "date": "Date",
+    "description": "Description",
+    "deviceRanking": "Device Ranking",
+    "deviceNote": "Your top 3 most-used devices account for 55% of total water consumption this month.",
+    "weeklyAvg": "Weekly Average Consumption",
+    "weeklyAvgLegend": "Weekly Average",
+    "weeklyNote": "Your consumption this week is 20% lower than last week — keep it up to save more!",
+    "banner": {
+      "goodMonth": "Great month!",
+      "goodMonthDesc": "You reduced your consumption by 12% last month, saving S/24.",
+      "tip": "Tip: Actively check your hydraulic pipes to help avoid unexpected leaks."
+    },
+    "export": {
+      "title": "Export Report",
+      "format": "Export Format",
+      "total": "Total so far",
+      "lastMonth": "Last month",
+      "lastWeek": "Last week",
+      "download": "Download"
+    }
+  },
+  "settings": {
+    "title": "My Settings",
+    "autoMode": {
+      "title": "Auto Saving Mode",
+      "closeValves": "Close valves when active for more than 50 mins",
+      "blockAll": "Lock all valves when you leave home",
+      "block20": "Lock valves when exceeding 20% of estimated consumption",
+      "reduceIntensity": "Reduce water intensity during overconsumption"
+    },
+    "notifications": {
+      "title": "Notifications and alerts",
+      "highConsumption": "High Consumption Alerts",
+      "summary": "Daily/Weekly Summary",
+      "schedule": "Notification schedule",
+      "edit": "Edit",
+      "scheduleEdit": "Edit notification schedule",
+      "start": "Start",
+      "end": "End"
+    },
+    "reports": {
+      "title": "Custom reports",
+      "frequency": "Report frequency",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "format": "Format"
+    },
+    "help": {
+      "title": "Help & Support",
+      "center": "Help Center and FAQ",
+      "contact": "Support contact",
+      "tutorials": "Tutorials & guides"
+    },
+    "security": {
+      "title": "Security & Privacy",
+      "changePassword": "Change password",
+      "twoFactor": "Two-factor authentication",
+      "changePasswordBtn": "Change",
+      "twoFactorBtn": "Enable",
+      "twoFactorModalTitle": "Two-factor authentication",
+      "twoFactorModalDescription": "Enable two-step verification to add an extra layer of security to your account.",
+      "twoFactorChoose": "Choose a method",
+      "twoFactorAuthenticator": "Authenticator app (Google Authenticator, Authy)",
+      "twoFactorSMS": "SMS code",
+      "twoFactorAuthenticatorDesc": "Generate one-time codes from an authenticator app.",
+      "twoFactorSMSDesc": "Receive verification codes via SMS on your phone.",
+      "phoneNumber": "Phone number",
+      "phonePlaceholder": "+1 555 123 4567",
+      "enableTwoFactorBtn": "Enable 2FA",
+      "twoFactorPhoneError": "Enter a valid phone number to receive SMS.",
+      "passwordModalTitle": "Change password",
+      "passwordModalDescription": "Update your password from this popup without leaving the page.",
+      "currentPassword": "Current password",
+      "currentPasswordPlaceholder": "Enter your current password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter the new password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter the new password",
+      "savePasswordBtn": "Save password",
+      "passwordRequired": "Please fill in all fields.",
+      "passwordMinLength": "The new password must be at least 6 characters.",
+      "passwordMismatch": "The passwords do not match."
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Data saved successfully",
+    "cancelConfirm": "Are you sure you want to cancel?",
+    "no": "No"
+  }
+}
