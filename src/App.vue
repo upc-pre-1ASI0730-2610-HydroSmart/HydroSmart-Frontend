@@ -102,7 +102,7 @@ onUnmounted(() => {
 <template>
   <div class="app-shell">
     <aside class="sidebar">
-      <img class="sidebar__logo" src="./logo-hydrosmart.png" :alt="t('app.logoAlt')" />
+      <img class="sidebar__logo" src="/logo-hydrosmart.png" :alt="t('app.logoAlt')" />
 
       <nav class="sidebar__nav">
         <RouterLink class="nav-link" active-class="is-active" to="/dashboard">
