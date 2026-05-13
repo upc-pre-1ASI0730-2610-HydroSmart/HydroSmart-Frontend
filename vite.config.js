@@ -6,7 +6,11 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/HydroSmart-Frontend/',
+  // Use a relative base so built assets work when the site is served from the
+  // root or from a subpath (Netlify, GitHub Pages, etc.). The previous value
+  // '/HydroSmart-Frontend/' caused assets to be requested from that absolute
+  // path which made the deployed site show a blank page due to 404s on bundles.
+  base: './',
   plugins: [
     vue(),
     vueDevTools({
