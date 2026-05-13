@@ -106,5 +106,51 @@
       "savingAutomations": "Suggest saving automations",
       "leakAlerts": "Alerts for possible water leaks"
     }
+  },
+  "settings": {
+    "title": "My Settings",
+    "autoMode": {
+      "title": "Auto Saving Mode",
+      "closeValves": "Close valves when active for more than 50 mins",
+      "blockAll": "Lock all valves when you leave home",
+      "block20": "Lock valves when exceeding 20% of estimated consumption",
+      "reduceIntensity": "Reduce water intensity during overconsumption"
+    },
+    "notifications": {
+      "title": "Notifications and alerts",
+      "highConsumption": "High Consumption Alerts",
+      "summary": "Daily/Weekly Summary",
+      "schedule": "Notification schedule",
+      "edit": "Edit",
+      "scheduleEdit": "Edit notification schedule",
+      "start": "Start",
+      "end": "End"
+    },
+    "reports": {
+      "title": "Custom reports",
+      "frequency": "Report frequency",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "format": "Format"
+    },
+     "help": {
+       "title": "Help & Support",
+       "center": "Help Center and FAQ",
+       "contact": "Support contact",
+       "tutorials": "Tutorials & guides"
+     },
+     "security": {
+       "title": "Security & Privacy",
+       "changePassword": "Change password",
+       "twoFactor": "Two-factor authentication",
+       "changePasswordBtn": "Change",
+       "twoFactorBtn": "Enable"
+     },
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Data saved successfully",
+    "cancelConfirm": "Are you sure you want to cancel?",
+    "no": "No"
   }
 }
