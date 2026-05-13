@@ -72,12 +72,43 @@
         </div>
       </div>
     </div>
-    <!-- Modal para editar horario -->
-    <div v-if="showHorarioModal" class="settings-modal-overlay">
-      <div class="settings-modal">
-        <p>{{ t('settings.notifications.scheduleEdit') }}</p>
-        <input v-model="horarioTemp" class="settings-input" />
-        <div class="settings-modal-actions">
+    <!-- Drawer lateral para editar horario (selector estilo alarma) -->
+    <div v-if="showHorarioModal" class="settings-drawer-overlay" @click.self="showHorarioModal = false">
+      <div class="settings-drawer">
+        <h3>{{ t('settings.notifications.scheduleEdit') }}</h3>
+        <div class="time-pickers">
+          <div class="time-picker">
+            <label>{{ t('settings.notifications.start') }}</label>
+            <div class="picker-row">
+              <select v-model="startHour">
+                <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
+              </select>
+              <select v-model="startMin">
+                <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
+              </select>
+              <select v-model="startAmpm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
+          </div>
+          <div class="time-picker">
+            <label>{{ t('settings.notifications.end') }}</label>
+            <div class="picker-row">
+              <select v-model="endHour">
+                <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
+              </select>
+              <select v-model="endMin">
+                <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
+              </select>
+              <select v-model="endAmpm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="settings-modal-actions drawer-actions">
           <button @click="guardarHorario" class="settings-save">{{ t('settings.save') }}</button>
           <button @click="showHorarioModal = false" class="settings-cancel">{{ t('settings.cancel') }}</button>
         </div>
@@ -110,10 +141,45 @@ const alertasConsumo = ref(initialState.alertasConsumo)
 const resumen = ref(initialState.resumen)
 const horario = ref(initialState.horario)
 
+// UI state
 const showToast = ref(false)
 const showModal = ref(false)
 const showHorarioModal = ref(false)
-const horarioTemp = ref(horario.value)
+
+// Selectores de tiempo (estilo alarma)
+const hours = Array.from({ length: 12 }).map((_, i) => String(i + 1).padStart(2, '0'))
+const minutes = Array.from({ length: 12 }).map((_, i) => String(i * 5).padStart(2, '0')) // 00,05,...55
+
+const startHour = ref('05')
+const startMin = ref('00')
+const startAmpm = ref('AM')
+const endHour = ref('10')
+const endMin = ref('00')
+const endAmpm = ref('PM')
+
+function pad2(n) {
+  return String(n).padStart(2, '0')
+}
+
+function parseTimeString(str) {
+  // intenta extraer HH:MM y AM/PM
+  if (!str) return { hour: '12', min: '00', ampm: 'AM' }
+  const parts = str.split('-').map(s => s.trim())
+  // We'll return first part by caller
+  const t = parts[0] || str
+  const m = t.match(/(\d{1,2}):(\d{2})\s*([AaPp][Mm])?/) // e.g. 05:00 AM or 22:00
+  if (!m) return { hour: '12', min: '00', ampm: 'AM' }
+  let h = parseInt(m[1], 10)
+  const min = pad2(m[2])
+  let ampm = (m[3] || '').toUpperCase()
+  if (!ampm) {
+    // si no viene AM/PM, inferir: si h>=12 -> PM
+    ampm = h >= 12 ? 'PM' : 'AM'
+  }
+  // convertir a 12h
+  const hour12 = ((h + 11) % 12) + 1
+  return { hour: pad2(hour12), min, ampm }
+}
 
 function onSave() {
   showToast.value = true
@@ -147,12 +213,21 @@ function confirmCancel() {
 }
 
 function editarHorario() {
-  horarioTemp.value = horario.value
+  // Parsear horario actual en los selectores
+  const parts = horario.value.split('-').map(p => p.trim())
+  const s = parseTimeString(parts[0])
+  const e = parseTimeString(parts[1] || parts[0])
+  startHour.value = s.hour
+  startMin.value = s.min
+  startAmpm.value = s.ampm
+  endHour.value = e.hour
+  endMin.value = e.min
+  endAmpm.value = e.ampm
   showHorarioModal.value = true
 }
 
 function guardarHorario() {
-  horario.value = horarioTemp.value
+  horario.value = `${startHour.value}:${startMin.value} ${startAmpm.value} - ${endHour.value}:${endMin.value} ${endAmpm.value}`
   showHorarioModal.value = false
 }
 </script>
@@ -305,5 +380,55 @@ function guardarHorario() {
   border-radius: 8px;
   font-size: 1rem;
   width: 80%;
+}
+
+/* Drawer lateral para editar horario */
+.settings-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 2100;
+  display: flex;
+  justify-content: flex-end;
+}
+.settings-drawer {
+  width: 380px;
+  max-width: 90%;
+  background: #fff;
+  padding: 1.5rem 1.8rem;
+  box-shadow: -6px 2px 24px rgba(0,0,0,0.14);
+  border-left: 1px solid #e6eef6;
+  animation: slideIn 220ms ease-out;
+}
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0 }
+  to { transform: translateX(0); opacity: 1 }
+}
+.time-pickers {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.time-picker label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.picker-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.picker-row select {
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid #b6c6d6;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 1rem;
+}
+.drawer-actions {
+  justify-content: flex-end;
+  margin-top: 1.4rem;
 }
 </style>

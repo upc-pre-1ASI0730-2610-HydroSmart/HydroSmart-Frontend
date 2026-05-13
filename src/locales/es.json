@@ -133,6 +133,8 @@
       "schedule": "Horario de notificaciones",
       "edit": "Editar",
       "scheduleEdit": "Editar horario de notificaciones"
+      ,"start": "Inicio",
+      "end": "Fin"
     }
   }
 }

@@ -122,7 +122,9 @@
       "summary": "Daily/Weekly Summary",
       "schedule": "Notification schedule",
       "edit": "Edit",
-      "scheduleEdit": "Edit notification schedule"
+      "scheduleEdit": "Edit notification schedule",
+      "start": "Start",
+      "end": "End"
     },
     "save": "Save",
     "cancel": "Cancel",
