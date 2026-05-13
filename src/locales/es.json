@@ -12,7 +12,11 @@
     "languageSwitchToEn": "EN",
     "languageSwitchToEs": "ES",
     "notifications": "Notificaciones",
-    "avatarAlt": "Foto de perfil"
+    "avatarAlt": "Foto de perfil",
+    "consumption": "Consumo",
+    "unit": {
+      "liters": "Litros"
+    }
   },
   "views": {
     "dashboard": "Dashboard",
@@ -60,51 +64,82 @@
       }
     }
   },
-  "devices":{
-    "title": "Mis Dispositivos",
-    "loading": "Cargando dispositivos...",
-    "section": "Sección",
-    "realTimeStatus": "Estado en tiempo real",
-    "lastActive": "Última vez activo",
-    "alertsHistory": "Historial de alertas",
-    "energyConsumption": "Consumo de Agua",
-    "active": "Activo",
-    "inactive": "Inactivo",
-    "noAlerts": "Sin alertas",
-    "viewAlerts": "Ver {count} alerta | Ver {count} alertas",
-    "preferences": "Preferencias",
-    "addDevice": "Añadir Disp.",
-    "settings": "Configuración del dispositivo",
-    "save": "Guardar cambios",
-    "saving": "Guardando...",
-    "cancel": "Cancelar",
-    "edit": "Editar",
-    "saved": "Dispositivo actualizado",
-    "litersPerWeek": "{count} litros esta semana",
-    "preferencesTitle": "Preferencia de Monitoreo de Dispositivos",
-    "resetPreferences": "Restablecer Preferencias",
-    "savePreferences": "Guardar Preferencias",
-    "form": {
-      "name": "Nombre",
-      "section": "Sección",
-      "status": "Estado",
-      "lastActive": "Última actividad",
-      "alerts": "Alertas",
-      "consumption": "Consumo semanal en litros"
-    },
-    "preferencesItems": {
-      "waterMonitoring": "Encender Monitoreo de Agua",
-      "highConsumptionAlerts": "Recibir alertas de consumo alto",
-      "includePowerTime": "Incluir Potencia y Tiempo en los reportes",
-      "monitorResources": "Monitorear Recursos Mayores",
-      "monitorAllPipes": "Monitorear todos los caños",
-      "autoBlockKeys": "Bloquear las llaves automáticamente",
-      "advancedReports": "Incluir Reportes Avanzados",
-      "hydraulicPower": "Registrar potencia hidráulica",
-      "dailyEmailReports": "Reportes diarios por correo electrónico",
-      "weeklyProgress": "Reporte de Progreso Semanal",
-      "savingAutomations": "Sugerir automatizaciones de ahorro",
-      "leakAlerts": "Alertas por posibles fugas de agua"
-    }
-  }
-}
+   "devices":{
+     "title": "Mis Dispositivos",
+     "loading": "Cargando dispositivos...",
+     "section": "Sección",
+     "realTimeStatus": "Estado en tiempo real",
+     "lastActive": "Última vez activo",
+     "alertsHistory": "Historial de alertas",
+     "energyConsumption": "Consumo de Agua",
+     "active": "Activo",
+     "inactive": "Inactivo",
+     "noAlerts": "Sin alertas",
+     "viewAlerts": "Ver {count} alerta | Ver {count} alertas",
+     "preferences": "Preferencias",
+     "addDevice": "Añadir Disp.",
+     "settings": "Configuración del dispositivo",
+     "save": "Guardar cambios",
+     "saving": "Guardando...",
+     "cancel": "Cancelar",
+     "edit": "Editar",
+     "saved": "Dispositivo actualizado",
+     "litersPerWeek": "{count} litros esta semana",
+     "preferencesTitle": "Preferencia de Monitoreo de Dispositivos",
+     "resetPreferences": "Restablecer Preferencias",
+     "savePreferences": "Guardar Preferencias",
+     "form": {
+       "name": "Nombre",
+       "section": "Sección",
+       "status": "Estado",
+       "lastActive": "Última actividad",
+       "alerts": "Alertas",
+       "consumption": "Consumo semanal en litros"
+     },
+     "preferencesItems": {
+       "waterMonitoring": "Encender Monitoreo de Agua",
+       "highConsumptionAlerts": "Recibir alertas de consumo alto",
+       "includePowerTime": "Incluir Potencia y Tiempo en los reportes",
+       "monitorResources": "Monitorear Recursos Mayores",
+       "monitorAllPipes": "Monitorear todos los caños",
+       "autoBlockKeys": "Bloquear las llaves automáticamente",
+       "advancedReports": "Incluir Reportes Avanzados",
+       "hydraulicPower": "Registrar potencia hidráulica",
+       "dailyEmailReports": "Reportes diarios por correo electrónico",
+       "weeklyProgress": "Reporte de Progreso Semanal",
+       "savingAutomations": "Sugerir automatizaciones de ahorro",
+       "leakAlerts": "Alertas por posibles fugas de agua"
+     }
+   },
+   "dashboard": {
+     "waterConsumption": "Consumo de agua",
+     "monthlySavingGoal": "Monthly saving goal",
+     "estimatedSavings": "Ahorros estimados",
+     "activeDevices": "Dispositivos activos",
+     "estimatedBill": "Factura Estimada",
+     "todayConsumption": "Consumo de hoy",
+     "dailyWaterConsumption": "Consumo diario de agua",
+     "consumptionByCategory": "Consumo de agua por categoría",
+     "monthlyConsumption": "Consumo Mensual",
+     "comparison": "Comparación",
+     "alerts": "Alertas",
+     "myDevices": "Mis dispositivos",
+     "highConsumptionDetected": "Consumo alto detectado!",
+     "highConsumptionMessage": "Tu uso actual del agua ha superado en 20% a tu cantidad promedio diaria.",
+     "reminderTitle": "Recordatorio:",
+     "reminderMessage": "Es probable que hayas dejado el caño del 'Lavabo 1' abierto.",
+     "categories": {
+       "showers": "Duchas",
+       "toilets": "Inodoros",
+       "filters": "Filtros",
+       "others": "Otros",
+       "faucets": "Lavabos"
+     },
+     "devices": {
+       "faucet1": "Lavabo 1",
+       "shower3": "Ducha 3",
+       "kitchenFaucet1": "Lavabo de Cocina 1",
+       "status": "Estado"
+     }
+   }
+ }
