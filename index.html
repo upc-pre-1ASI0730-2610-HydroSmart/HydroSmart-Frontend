@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/HydroSmart-Frontend/favicon.ico" onerror="this.remove()">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroSmart</title>
+    <script>
+      // Handle redirect from 404.html for SPA routing
+      if (sessionStorage.redirect) {
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        history.replaceState(null, null, redirect);
+      }
+    </script>
+    <script type="module" crossorigin src="/HydroSmart-Frontend/assets/index-DpedGuzx.js"></script>
+    <link rel="stylesheet" crossorigin href="/HydroSmart-Frontend/assets/index-CeVxb6WP.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
