@@ -106,5 +106,15 @@
       "savingAutomations": "Sugerir automatizaciones de ahorro",
       "leakAlerts": "Alertas por posibles fugas de agua"
     }
+  },
+  "settings": {
+    "title": "Mi Configuración",
+    "autoMode": {
+      "title": "Modo de ahorro automático",
+      "closeValves": "Cerrar llaves cuando están activas por más de 50 mins",
+      "blockAll": "Bloquear todas las llaves cuando salgas de casa",
+      "block20": "Bloquear llaves al superar un 20% el consumo estimado",
+      "reduceIntensity": "Reducir intensidad del agua en momentos de sobreconsumo"
+    }
   }
 }
