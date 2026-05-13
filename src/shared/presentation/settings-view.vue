@@ -122,11 +122,11 @@
          <div class="security-list">
            <div class="security-row">
              <div class="security-label">{{ t('settings.security.changePassword') }}</div>
-              <button class="security-edit-badge">{{ t('settings.security.changePasswordBtn') }}</button>
+                <button class="security-edit-badge" type="button" @click="openPasswordModal">{{ t('settings.security.changePasswordBtn') }}</button>
            </div>
            <div class="security-row">
-             <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
-              <button class="security-edit-badge">{{ t('settings.security.twoFactorBtn') }}</button>
+              <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
+                <button class="security-edit-badge" type="button" @click="openTwoFactorModal">{{ t('settings.security.twoFactorBtn') }}</button>
            </div>
          </div>
        </div>
@@ -136,9 +136,9 @@
            <span>{{ t('settings.help.title') }}</span>
          </div>
          <div class="help-list">
-           <a class="help-link" href="#">{{ t('settings.help.center') }}</a>
-           <a class="help-link" href="#">{{ t('settings.help.contact') }}</a>
-           <a class="help-link" href="#">{{ t('settings.help.tutorials') }}</a>
+            <router-link class="help-link" to="/help">{{ t('settings.help.center') }}</router-link>
+            <router-link class="help-link" to="/help/contact">{{ t('settings.help.contact') }}</router-link>
+            <router-link class="help-link" to="/help/tutorials">{{ t('settings.help.tutorials') }}</router-link>
          </div>
        </div>
      </div>
@@ -158,6 +158,100 @@
           <button @click="confirmCancel" class="settings-save">{{ t('settings.cancel') }}</button>
           <button @click="showModal = false" class="settings-cancel">{{ t('settings.no') }}</button>
         </div>
+      </div>
+    </div>
+    <!-- Modal para cambiar contraseña -->
+    <div v-if="showPasswordModal" class="password-modal-overlay" @click.self="closePasswordModal">
+      <div class="password-modal" @click.stop>
+        <div class="password-modal-header">
+          <div>
+            <p class="password-modal-kicker">{{ t('settings.security.title') }}</p>
+            <h2>{{ t('settings.security.passwordModalTitle') }}</h2>
+          </div>
+          <button type="button" class="password-modal-close" @click="closePasswordModal">×</button>
+        </div>
+
+        <p class="password-modal-description">
+          {{ t('settings.security.passwordModalDescription') }}
+        </p>
+
+        <form class="password-form" @submit.prevent="savePasswordChange">
+          <label class="password-field">
+            <span>{{ t('settings.security.currentPassword') }}</span>
+            <input v-model="currentPassword" type="password" :placeholder="t('settings.security.currentPasswordPlaceholder')" />
+          </label>
+
+          <label class="password-field">
+            <span>{{ t('settings.security.newPassword') }}</span>
+            <input v-model="newPassword" type="password" :placeholder="t('settings.security.newPasswordPlaceholder')" />
+          </label>
+
+          <label class="password-field">
+            <span>{{ t('settings.security.confirmPassword') }}</span>
+            <input v-model="confirmPassword" type="password" :placeholder="t('settings.security.confirmPasswordPlaceholder')" />
+          </label>
+
+          <p v-if="passwordError" class="password-error">{{ passwordError }}</p>
+
+          <div class="password-modal-actions">
+            <button type="button" class="password-secondary-btn" @click="closePasswordModal">
+              {{ t('settings.cancel') }}
+            </button>
+            <button type="submit" class="password-primary-btn">
+              {{ t('settings.security.savePasswordBtn') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Modal para Autenticación en Dos Factores -->
+    <div v-if="showTwoFactorModal" class="password-modal-overlay" @click.self="closeTwoFactorModal">
+      <div class="password-modal" @click.stop>
+        <div class="password-modal-header">
+          <div>
+            <p class="password-modal-kicker">{{ t('settings.security.title') }}</p>
+            <h2>{{ t('settings.security.twoFactorModalTitle') }}</h2>
+          </div>
+          <button type="button" class="password-modal-close" @click="closeTwoFactorModal">×</button>
+        </div>
+
+        <p class="password-modal-description">
+          {{ t('settings.security.twoFactorModalDescription') }}
+        </p>
+
+        <form class="password-form" @submit.prevent="saveTwoFactorSettings">
+          <div class="twofactor-field">
+            <span>{{ t('settings.security.twoFactorChoose') }}</span>
+            <div class="twofactor-options">
+              <label class="twofactor-item">
+                <input type="radio" value="authenticator" v-model="twoFactorMethod" />
+                <div class="twofactor-label">
+                  <strong>{{ t('settings.security.twoFactorAuthenticator') }}</strong>
+                  <div class="twofactor-sub">{{ t('settings.security.twoFactorAuthenticatorDesc') }}</div>
+                </div>
+              </label>
+              <label class="twofactor-item">
+                <input type="radio" value="sms" v-model="twoFactorMethod" />
+                <div class="twofactor-label">
+                  <strong>{{ t('settings.security.twoFactorSMS') }}</strong>
+                  <div class="twofactor-sub">{{ t('settings.security.twoFactorSMSDesc') }}</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div v-if="twoFactorMethod === 'sms'" class="password-field">
+            <span>{{ t('settings.security.phoneNumber') }}</span>
+            <input v-model="twoFactorPhone" type="tel" :placeholder="t('settings.security.phonePlaceholder')" />
+          </div>
+
+          <p v-if="twoFactorError" class="password-error">{{ twoFactorError }}</p>
+
+          <div class="password-modal-actions">
+            <button type="button" class="password-secondary-btn" @click="closeTwoFactorModal">{{ t('settings.cancel') }}</button>
+            <button type="submit" class="password-primary-btn">{{ t('settings.security.enableTwoFactorBtn') }}</button>
+          </div>
+        </form>
       </div>
     </div>
     <!-- antes había un drawer; ahora usamos un popover compacto dentro de .settings-horario -->
@@ -194,8 +288,17 @@ const horario = ref(initialState.horario)
 const showToast = ref(false)
 const showModal = ref(false)
 const showHorarioModal = ref(false)
+const showPasswordModal = ref(false)
+const showTwoFactorModal = ref(false)
 const editBtn = ref(null)
 const popoverEl = ref(null)
+const currentPassword = ref('')
+const newPassword = ref('')
+const confirmPassword = ref('')
+const passwordError = ref('')
+const twoFactorMethod = ref('authenticator')
+const twoFactorPhone = ref('')
+const twoFactorError = ref('')
 
 // Selectores de tiempo (estilo alarma)
 const hours = Array.from({ length: 12 }).map((_, i) => String(i + 1).padStart(2, '0'))
@@ -345,6 +448,74 @@ function setFormat(f) {
   reportFormat.value = f
 }
 
+function openPasswordModal() {
+  passwordError.value = ''
+  currentPassword.value = ''
+  newPassword.value = ''
+  confirmPassword.value = ''
+  showPasswordModal.value = true
+}
+
+function closePasswordModal() {
+  showPasswordModal.value = false
+  passwordError.value = ''
+  currentPassword.value = ''
+  newPassword.value = ''
+  confirmPassword.value = ''
+}
+
+function savePasswordChange() {
+  if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
+    passwordError.value = t('settings.security.passwordRequired')
+    return
+  }
+
+  if (newPassword.value.length < 6) {
+    passwordError.value = t('settings.security.passwordMinLength')
+    return
+  }
+
+  if (newPassword.value !== confirmPassword.value) {
+    passwordError.value = t('settings.security.passwordMismatch')
+    return
+  }
+
+  passwordError.value = ''
+  closePasswordModal()
+  showToast.value = true
+  setTimeout(() => {
+    showToast.value = false
+  }, 2200)
+}
+
+function openTwoFactorModal() {
+  twoFactorError.value = ''
+  twoFactorMethod.value = 'authenticator'
+  twoFactorPhone.value = ''
+  showTwoFactorModal.value = true
+}
+
+function closeTwoFactorModal() {
+  showTwoFactorModal.value = false
+  twoFactorError.value = ''
+}
+
+function saveTwoFactorSettings() {
+  // Validaciones básicas
+  if (twoFactorMethod.value === 'sms') {
+    if (!twoFactorPhone.value || !/\d{6,}/.test(twoFactorPhone.value.replace(/\s|\-|\+/g, ''))) {
+      twoFactorError.value = t('settings.security.twoFactorPhoneError')
+      return
+    }
+  }
+
+  // Simular habilitación
+  twoFactorError.value = ''
+  showTwoFactorModal.value = false
+  showToast.value = true
+  setTimeout(() => { showToast.value = false }, 2200)
+}
+
 function onDocClick(e) {
   if (!showHorarioModal.value) return
   const pop = popoverEl.value
@@ -432,6 +603,9 @@ onBeforeUnmount(() => {
   cursor: pointer;
   font-weight: 500;
 }
+.security-edit-badge:hover {
+  opacity: 0.92;
+}
 .settings-add-btn {
   background: #0a2c47;
   color: #fff;
@@ -487,28 +661,38 @@ onBeforeUnmount(() => {
   margin: 0.9rem 0;
 }
 .reports-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 0.2rem;
+  width: 100%;
 }
 .reports-title {
   font-size: 1.05rem;
   margin: 0 0 0.6rem 0;
   font-weight: 600;
+  width: 100%;
+  text-align: center;
 }
 .report-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.8rem;
+  justify-content: center;
+  gap: 0.45rem;
   margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
 }
 .report-label {
-  min-width: 140px;
   color: #233;
   font-size: 0.95rem;
 }
 .pills {
   display: flex;
   gap: 0.45rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 .pill {
   padding: 0.28rem 0.7rem;
@@ -518,6 +702,7 @@ onBeforeUnmount(() => {
   color: #0a2c47;
   font-size: 0.9rem;
   cursor: pointer;
+  white-space: nowrap;
 }
 .pill.active {
   background: #0a2c47;
@@ -580,12 +765,191 @@ onBeforeUnmount(() => {
   min-width: 320px;
   text-align: center;
 }
+.password-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 18, 31, 0.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2100;
+  padding: 1rem;
+}
+.password-modal {
+  width: min(100%, 560px);
+  background: linear-gradient(180deg, #f9fbfd 0%, #ffffff 100%);
+  border: 1.5px solid #b6c6d6;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(4,24,44,0.28);
+  padding: 1.5rem 1.6rem 1.4rem;
+  color: #0f172a;
+}
+.password-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.password-modal-kicker {
+  margin: 0 0 0.25rem;
+  color: #0a6eb8;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.password-modal h2 {
+  margin: 0;
+  font-size: 1.65rem;
+  line-height: 1.15;
+  color: #0a2c47;
+}
+.password-modal-close {
+  border: none;
+  background: transparent;
+  color: #0a2c47;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.password-modal-description {
+  margin: 0.85rem 0 1.2rem;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+.twofactor-field span {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.twofactor-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 0.35rem;
+}
+.twofactor-item {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+.twofactor-item input[type="radio"] {
+  margin-top: 6px;
+  width: 18px;
+  height: 18px;
+}
+.twofactor-label {
+  display: flex;
+  flex-direction: column;
+}
+.twofactor-label strong {
+  font-size: 1rem;
+  color: #0a2c47;
+}
+.twofactor-sub {
+  color: #475569;
+  font-size: 0.92rem;
+  margin-top: 0.18rem;
+}
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+.password-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.password-field input {
+  width: 100%;
+  border: 1.5px solid #b6c6d6;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0.95rem 1rem;
+  font-size: 0.98rem;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.password-field input::placeholder {
+  color: #94a3b8;
+}
+.password-field input:focus {
+  border-color: #0a6eb8;
+  box-shadow: 0 0 0 3px rgba(10, 110, 184, 0.12);
+}
+.password-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.92rem;
+}
+.password-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 0.6rem;
+}
+.password-secondary-btn {
+  background: #fff;
+  color: #0a2c47;
+  border: 1.5px solid #0a2c47;
+  border-radius: 16px;
+  padding: 0.75rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.password-primary-btn {
+  background: #0a2c47;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.75rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.password-secondary-btn:hover,
+.password-primary-btn:hover {
+  transform: translateY(-1px);
+}
+.password-secondary-btn:active,
+.password-primary-btn:active {
+  transform: translateY(0);
+}
 .settings-modal-actions {
    margin-top: 1.5rem;
    display: flex;
    justify-content: center;
    gap: 1.5rem;
  }
+
+@media (max-width: 640px) {
+  .password-modal {
+    padding: 1.2rem;
+    border-radius: 18px;
+  }
+
+  .password-modal h2 {
+    font-size: 1.35rem;
+  }
+
+  .password-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .password-secondary-btn,
+  .password-primary-btn {
+    width: 100%;
+  }
+}
 
  /* Popover compacto (burbuja) junto al botón Editar */
 .settings-popover {
