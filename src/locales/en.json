@@ -120,6 +120,14 @@
     "cancel": "Cancel",
     "saved": "Data saved successfully",
     "cancelConfirm": "Are you sure you want to cancel?",
-    "no": "No"
+    "no": "No",
+    "notifications": {
+      "title": "Notifications and alerts",
+      "highConsumption": "High Consumption Alerts",
+      "summary": "Daily/Weekly Summary",
+      "schedule": "Notification schedule",
+      "edit": "Edit",
+      "scheduleEdit": "Edit notification schedule"
+    }
   }
 }

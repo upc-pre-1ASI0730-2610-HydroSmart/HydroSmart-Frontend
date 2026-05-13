@@ -31,6 +31,28 @@
           </label>
         </div>
       </div>
+      <!-- Notificaciones y alertas -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <span>{{ t('settings.notifications.title') }}</span>
+        </div>
+        <div class="settings-switch-group">
+          <label class="settings-switch">
+            <input type="checkbox" v-model="alertasConsumo" />
+            <span class="slider"></span>
+            {{ t('settings.notifications.highConsumption') }}
+          </label>
+          <label class="settings-switch">
+            <input type="checkbox" v-model="resumen" />
+            <span class="slider"></span>
+            {{ t('settings.notifications.summary') }}
+          </label>
+        </div>
+        <div class="settings-horario">
+          <span>{{ t('settings.notifications.schedule') }}: {{ horario }}</span>
+          <button class="settings-edit-btn" @click="editarHorario">{{ t('settings.notifications.edit') }}</button>
+        </div>
+      </div>
     </div>
     <div class="settings-actions">
       <button class="settings-save" @click="onSave">{{ t('settings.save') }}</button>
@@ -50,6 +72,17 @@
         </div>
       </div>
     </div>
+    <!-- Modal para editar horario -->
+    <div v-if="showHorarioModal" class="settings-modal-overlay">
+      <div class="settings-modal">
+        <p>{{ t('settings.notifications.scheduleEdit') }}</p>
+        <input v-model="horarioTemp" class="settings-input" />
+        <div class="settings-modal-actions">
+          <button @click="guardarHorario" class="settings-save">{{ t('settings.save') }}</button>
+          <button @click="showHorarioModal = false" class="settings-cancel">{{ t('settings.cancel') }}</button>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -64,15 +97,23 @@ const initialState = {
   autoClose: false,
   blockAll: true,
   block20: false,
-  reduceIntensity: true
+  reduceIntensity: true,
+  alertasConsumo: true,
+  resumen: true,
+  horario: '05:00 AM - 22:00 PM'
 }
 const autoClose = ref(initialState.autoClose)
 const blockAll = ref(initialState.blockAll)
 const block20 = ref(initialState.block20)
 const reduceIntensity = ref(initialState.reduceIntensity)
+const alertasConsumo = ref(initialState.alertasConsumo)
+const resumen = ref(initialState.resumen)
+const horario = ref(initialState.horario)
 
 const showToast = ref(false)
 const showModal = ref(false)
+const showHorarioModal = ref(false)
+const horarioTemp = ref(horario.value)
 
 function onSave() {
   showToast.value = true
@@ -85,6 +126,9 @@ function onSave() {
   initialState.blockAll = blockAll.value
   initialState.block20 = block20.value
   initialState.reduceIntensity = reduceIntensity.value
+  initialState.alertasConsumo = alertasConsumo.value
+  initialState.resumen = resumen.value
+  initialState.horario = horario.value
 }
 
 function onCancel() {
@@ -96,7 +140,20 @@ function confirmCancel() {
   blockAll.value = initialState.blockAll
   block20.value = initialState.block20
   reduceIntensity.value = initialState.reduceIntensity
+  alertasConsumo.value = initialState.alertasConsumo
+  resumen.value = initialState.resumen
+  horario.value = initialState.horario
   showModal.value = false
+}
+
+function editarHorario() {
+  horarioTemp.value = horario.value
+  showHorarioModal.value = true
+}
+
+function guardarHorario() {
+  horario.value = horarioTemp.value
+  showHorarioModal.value = false
 }
 </script>
 
@@ -156,6 +213,22 @@ function confirmCancel() {
   accent-color: #0a2c47;
   width: 20px;
   height: 20px;
+}
+.settings-horario {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+}
+.settings-edit-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.2rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
 }
 .settings-actions {
   margin-top: 2rem;
@@ -223,5 +296,14 @@ function confirmCancel() {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
+}
+.settings-input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #b6c6d6;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 80%;
 }
 </style>

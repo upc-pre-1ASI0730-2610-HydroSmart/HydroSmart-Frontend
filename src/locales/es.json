@@ -42,7 +42,12 @@
     "photoModalTitle": "Pon el link acá"
   },
   "notifications": {
-    "title": "Notificaciones",
+    "title": "Notificaciones y alertas",
+    "highConsumption": "Alertas de Consumo Elevado",
+    "summary": "Resumen Diario/Semanal",
+    "schedule": "Horario de notificaciones",
+    "edit": "Editar",
+    "scheduleEdit": "Editar horario de notificaciones",
     "loading": "Cargando notificaciones...",
     "empty": "No tienes notificaciones nuevas.",
     "read": "Leída",
