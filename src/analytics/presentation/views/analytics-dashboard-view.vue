@@ -138,8 +138,8 @@ let monthlyChart = null
 const myDevices = [
   {
     id: 1,
-    icon: '🚰',
-    name: t('dashboard.devices.faucet1'),
+    icon: '🚽',
+    name: 'Inodoro 2',
     active: true
   },
   {
