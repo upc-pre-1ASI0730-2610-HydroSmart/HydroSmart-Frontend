@@ -144,16 +144,18 @@
       "monthly": "Mensual",
       "format": "Formato"
     }
-    ,"help": {
-      "title": "Ayuda y Soporte",
-      "center": "Centro de Ayuda y preguntas frecuentes",
-      "contact": "Contacto de soporte",
-      "tutorials": "Tutoriales y guías"
-    }
-    ,"security": {
-      "title": "Seguridad y Privacidad",
-      "changePassword": "Cambiar Contraseña",
-      "twoFactor": "Autenticación de dos factores"
-    }
+     ,"help": {
+       "title": "Ayuda y Soporte",
+       "center": "Centro de Ayuda y preguntas frecuentes",
+       "contact": "Contacto de soporte",
+       "tutorials": "Tutoriales y guías"
+     }
+     ,"security": {
+       "title": "Seguridad y Privacidad",
+       "changePassword": "Cambiar Contraseña",
+       "twoFactor": "Autenticación de dos factores",
+       "changePasswordBtn": "Cambiar",
+       "twoFactorBtn": "Activar"
+     }
   }
 }

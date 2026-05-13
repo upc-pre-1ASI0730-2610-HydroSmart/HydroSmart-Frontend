@@ -122,11 +122,11 @@
          <div class="security-list">
            <div class="security-row">
              <div class="security-label">{{ t('settings.security.changePassword') }}</div>
-             <button class="security-edit-badge">{{ t('settings.edit') }}</button>
+              <button class="security-edit-badge">{{ t('settings.security.changePasswordBtn') }}</button>
            </div>
            <div class="security-row">
              <div class="security-label">{{ t('settings.security.twoFactor') }}</div>
-             <button class="security-edit-badge">{{ t('settings.edit') }}</button>
+              <button class="security-edit-badge">{{ t('settings.security.twoFactorBtn') }}</button>
            </div>
          </div>
        </div>
@@ -211,6 +211,53 @@ const endAmpm = ref('PM')
 const reportFrequency = ref(initialState.reportFrequency)
 const reportFormat = ref(initialState.reportFormat)
 
+// Función para guardar en localStorage
+function saveToLocalStorage() {
+  const state = {
+    autoClose: autoClose.value,
+    blockAll: blockAll.value,
+    block20: block20.value,
+    reduceIntensity: reduceIntensity.value,
+    alertasConsumo: alertasConsumo.value,
+    resumen: resumen.value,
+    horario: horario.value,
+    reportFrequency: reportFrequency.value,
+    reportFormat: reportFormat.value
+  }
+  localStorage.setItem('hydrosmart-settings', JSON.stringify(state))
+}
+
+// Función para cargar del localStorage
+function loadFromLocalStorage() {
+  const saved = localStorage.getItem('hydrosmart-settings')
+  if (saved) {
+    try {
+      const state = JSON.parse(saved)
+      autoClose.value = state.autoClose || initialState.autoClose
+      blockAll.value = state.blockAll !== undefined ? state.blockAll : initialState.blockAll
+      block20.value = state.block20 || initialState.block20
+      reduceIntensity.value = state.reduceIntensity !== undefined ? state.reduceIntensity : initialState.reduceIntensity
+      alertasConsumo.value = state.alertasConsumo !== undefined ? state.alertasConsumo : initialState.alertasConsumo
+      resumen.value = state.resumen !== undefined ? state.resumen : initialState.resumen
+      horario.value = state.horario || initialState.horario
+      reportFrequency.value = state.reportFrequency || initialState.reportFrequency
+      reportFormat.value = state.reportFormat || initialState.reportFormat
+      // Actualizar initialState para cancelar funcione correctamente
+      initialState.autoClose = autoClose.value
+      initialState.blockAll = blockAll.value
+      initialState.block20 = block20.value
+      initialState.reduceIntensity = reduceIntensity.value
+      initialState.alertasConsumo = alertasConsumo.value
+      initialState.resumen = resumen.value
+      initialState.horario = horario.value
+      initialState.reportFrequency = reportFrequency.value
+      initialState.reportFormat = reportFormat.value
+    } catch (e) {
+      console.error('Error loading settings:', e)
+    }
+  }
+}
+
 function pad2(n) {
   return String(n).padStart(2, '0')
 }
@@ -236,22 +283,23 @@ function parseTimeString(str) {
 }
 
 function onSave() {
-  showToast.value = true
-  setTimeout(() => {
-    showToast.value = false
-  }, 2200)
-  // Aquí podrías guardar los datos en backend si lo tuvieras
-  // Actualiza el estado inicial
-  initialState.autoClose = autoClose.value
-  initialState.blockAll = blockAll.value
-  initialState.block20 = block20.value
-  initialState.reduceIntensity = reduceIntensity.value
-  initialState.alertasConsumo = alertasConsumo.value
-  initialState.resumen = resumen.value
-  initialState.horario = horario.value
-  initialState.reportFrequency = reportFrequency.value
-  initialState.reportFormat = reportFormat.value
-}
+   showToast.value = true
+   setTimeout(() => {
+     showToast.value = false
+   }, 2200)
+   // Actualiza el estado inicial
+   initialState.autoClose = autoClose.value
+   initialState.blockAll = blockAll.value
+   initialState.block20 = block20.value
+   initialState.reduceIntensity = reduceIntensity.value
+   initialState.alertasConsumo = alertasConsumo.value
+   initialState.resumen = resumen.value
+   initialState.horario = horario.value
+   initialState.reportFrequency = reportFrequency.value
+   initialState.reportFormat = reportFormat.value
+   // Guardar en localStorage
+   saveToLocalStorage()
+ }
 
 function onCancel() {
   showModal.value = true
@@ -308,6 +356,10 @@ function onDocClick(e) {
 
 onMounted(() => {
   document.addEventListener('click', onDocClick)
+})
+
+onMounted(() => {
+  loadFromLocalStorage()
 })
 
 onBeforeUnmount(() => {
@@ -529,22 +581,13 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 .settings-modal-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-.settings-input {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1.5px solid #b6c6d6;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 80%;
-}
+   margin-top: 1.5rem;
+   display: flex;
+   justify-content: center;
+   gap: 1.5rem;
+ }
 
-/* Popover compacto (burbuja) junto al botón Editar */
+ /* Popover compacto (burbuja) junto al botón Editar */
 .settings-popover {
   position: absolute;
   top: calc(100% + 8px); /* justo debajo del botón */

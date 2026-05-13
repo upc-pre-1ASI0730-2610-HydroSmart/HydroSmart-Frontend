@@ -134,17 +134,19 @@
       "monthly": "Monthly",
       "format": "Format"
     },
-    "help": {
-      "title": "Help & Support",
-      "center": "Help Center and FAQ",
-      "contact": "Support contact",
-      "tutorials": "Tutorials & guides"
-    },
-    "security": {
-      "title": "Security & Privacy",
-      "changePassword": "Change password",
-      "twoFactor": "Two-factor authentication"
-    },
+     "help": {
+       "title": "Help & Support",
+       "center": "Help Center and FAQ",
+       "contact": "Support contact",
+       "tutorials": "Tutorials & guides"
+     },
+     "security": {
+       "title": "Security & Privacy",
+       "changePassword": "Change password",
+       "twoFactor": "Two-factor authentication",
+       "changePasswordBtn": "Change",
+       "twoFactorBtn": "Enable"
+     },
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Data saved successfully",
