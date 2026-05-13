@@ -106,5 +106,36 @@
       "savingAutomations": "Suggest saving automations",
       "leakAlerts": "Alerts for possible water leaks"
     }
+  },
+  "reports": {
+    "title": "Reports",
+    "pageTitle": "My reports",
+    "pageSubtitle": "Metrics summary",
+    "loading": "Loading reports...",
+    "error": "Error loading reports",
+    "noReports": "No reports available",
+    "type": "Type",
+    "date": "Date",
+    "description": "Description",
+    "deviceRanking": "Device Ranking",
+    "deviceNote": "Your top 3 most-used devices account for 55% of total water consumption this month.",
+    "weeklyAvg": "Weekly Average Consumption",
+    "weeklyAvgLegend": "Weekly Average",
+    "weeklyNote": "Your consumption this week is 20% lower than last week — keep it up to save more!",
+    "banner": {
+      "goodMonth": "Great month!",
+      "goodMonthDesc": "You reduced your consumption by 12% last month, saving S/24.",
+      "tip": "Tip: Actively check your hydraulic pipes to help avoid unexpected leaks."
+    },
+    "export": {
+      "title": "Export Report",
+      "format": "Export Format",
+      "total": "Total so far",
+      "lastMonth": "Last month",
+      "lastWeek": "Last week",
+      "download": "Download",
+      "emailPlaceholder": "your@email.com",
+      "send": "Send Report"
+    }
   }
 }

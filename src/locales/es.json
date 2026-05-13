@@ -106,5 +106,36 @@
       "savingAutomations": "Sugerir automatizaciones de ahorro",
       "leakAlerts": "Alertas por posibles fugas de agua"
     }
+  },
+  "reports": {
+    "title": "Reportes",
+    "pageTitle": "Mis reportes",
+    "pageSubtitle": "Resumen de métricas",
+    "loading": "Cargando reportes...",
+    "error": "Error al cargar reportes",
+    "noReports": "No hay reportes disponibles",
+    "type": "Tipo",
+    "date": "Fecha",
+    "description": "Descripción",
+    "deviceRanking": "Ranking de dispositivos",
+    "deviceNote": "Tu top 3 dispositivos con más uso representan el 55% del consumo de agua total de este mes.",
+    "weeklyAvg": "Promedio de Consumo Semanal",
+    "weeklyAvgLegend": "Promedio Semanal",
+    "weeklyNote": "Tu consumo esta semana es un 20% menor al de la semana pasada, ¡sigue así para ahorrar más!",
+    "banner": {
+      "goodMonth": "¡Gran mes!",
+      "goodMonthDesc": "Reduciste tu consumo en un 12% el mes pasado, logrando ahorrar S/24.",
+      "tip": "Consejo: Comprobar activamente el funcionamiento de las tuberías hidráulicas, ayudarte a evitar derrames inesperados."
+    },
+    "export": {
+      "title": "Exportar Reporte",
+      "format": "Formato a Exportar",
+      "total": "Total hasta ahora",
+      "lastMonth": "Último mes",
+      "lastWeek": "Semana pasada",
+      "download": "Descargar",
+      "emailPlaceholder": "tu@correo.com",
+      "send": "Enviar Reporte"
+    }
   }
 }

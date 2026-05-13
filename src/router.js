@@ -7,18 +7,18 @@ import NotFoundView from './shared/presentation/page-not-found-view.vue'
 import { deviceRoutes } from './devices/presentation/devices-routes.js'
 import { profileRoutes } from './profiles/presentation/profiles-routes.js'
 import { notificationRoutes } from './notifications/presentation/notifications-routes.vue'
-import ReportsView from "@/reports/presentation/views/reports-view.vue";
+import { reportsRoutes } from './reports/presentation/reports-routes.js'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/dashboard' },
     { path: '/dashboard', name: 'dashboard', component: AnalyticsDashboardView },
-    { path: '/reports', name: 'reports', component: ReportsView },
     { path: '/settings', name: 'settings', component: SettingsView },
     ...deviceRoutes,
     ...profileRoutes,
     ...notificationRoutes,
+    ...reportsRoutes,
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView }
   ]
 })
