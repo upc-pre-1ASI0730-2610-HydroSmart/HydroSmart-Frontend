@@ -115,6 +115,11 @@
       "blockAll": "Bloquear todas las llaves cuando salgas de casa",
       "block20": "Bloquear llaves al superar un 20% el consumo estimado",
       "reduceIntensity": "Reducir intensidad del agua en momentos de sobreconsumo"
-    }
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Datos guardados correctamente",
+    "cancelConfirm": "¿Seguro que deseas cancelar?",
+    "no": "No"
   }
 }
