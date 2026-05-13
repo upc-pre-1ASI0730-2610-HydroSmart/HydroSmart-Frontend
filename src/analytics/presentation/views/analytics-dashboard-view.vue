@@ -171,7 +171,7 @@ const initializeDailyConsumptionChart = () => {
       datasets: [
         {
           label: 'Litros',
-          data: [15, 120, 85, 70, 140, 45, 10],
+          data: [10, 85, 35, 30, 95, 10, 0],
           borderColor: '#3b82f6',
           backgroundColor: 'rgba(59, 130, 246, 0.1)',
           borderWidth: 2,
@@ -199,9 +199,9 @@ const initializeDailyConsumptionChart = () => {
       scales: {
         y: {
           beginAtZero: true,
-          max: 180,
+          max: 120,
           ticks: {
-            stepSize: 30,
+            stepSize: 20,
             callback: function(value) {
               return value + ' L'
             },
