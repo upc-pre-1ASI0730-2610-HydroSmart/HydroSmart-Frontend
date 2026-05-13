@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import AnalyticsDashboardView from './analytics/presentation/views/analytics-dashboard-view.vue'
 import DevicesView from './devices/presentation/views/devices-view.vue'
@@ -13,7 +13,7 @@ import { notificationRoutes } from './notifications/presentation/notifications-r
 import { reportsRoutes } from './reports/presentation/reports-routes.js'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', redirect: '/dashboard' },
     { path: '/dashboard', name: 'dashboard', component: AnalyticsDashboardView },
