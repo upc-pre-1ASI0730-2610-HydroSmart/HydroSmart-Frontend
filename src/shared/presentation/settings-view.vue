@@ -50,7 +50,47 @@
         </div>
         <div class="settings-horario">
           <span>{{ t('settings.notifications.schedule') }}: {{ horario }}</span>
-          <button class="settings-edit-btn" @click="editarHorario">{{ t('settings.notifications.edit') }}</button>
+          <button ref="editBtn" class="settings-edit-btn" @click="editarHorario">{{ t('settings.notifications.edit') }}</button>
+
+          <!-- Popover pequeño estilo burbuja -->
+          <div v-if="showHorarioModal" ref="popoverEl" class="settings-popover" @click.stop>
+            <div class="time-pickers-compact">
+              <div class="time-picker-compact">
+                <label>{{ t('settings.notifications.start') }}</label>
+                <div class="picker-row-compact">
+                  <select v-model="startHour" class="hour">
+                    <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
+                  </select>
+                  <select v-model="startMin" class="min">
+                    <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
+                  </select>
+                  <select v-model="startAmpm" class="ampm">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              </div>
+              <div class="time-picker-compact">
+                <label>{{ t('settings.notifications.end') }}</label>
+                <div class="picker-row-compact">
+                  <select v-model="endHour" class="hour">
+                    <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
+                  </select>
+                  <select v-model="endMin" class="min">
+                    <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
+                  </select>
+                  <select v-model="endAmpm" class="ampm">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="popover-actions">
+              <button @click="guardarHorario" class="settings-save">{{ t('settings.save') }}</button>
+              <button @click="showHorarioModal = false" class="settings-cancel">{{ t('settings.cancel') }}</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -72,53 +112,12 @@
         </div>
       </div>
     </div>
-    <!-- Drawer lateral para editar horario (selector estilo alarma) -->
-    <div v-if="showHorarioModal" class="settings-drawer-overlay" @click.self="showHorarioModal = false">
-      <div class="settings-drawer">
-        <h3>{{ t('settings.notifications.scheduleEdit') }}</h3>
-        <div class="time-pickers">
-          <div class="time-picker">
-            <label>{{ t('settings.notifications.start') }}</label>
-            <div class="picker-row">
-              <select v-model="startHour">
-                <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
-              </select>
-              <select v-model="startMin">
-                <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
-              </select>
-              <select v-model="startAmpm">
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
-            </div>
-          </div>
-          <div class="time-picker">
-            <label>{{ t('settings.notifications.end') }}</label>
-            <div class="picker-row">
-              <select v-model="endHour">
-                <option v-for="h in hours" :key="h" :value="h">{{ h }}</option>
-              </select>
-              <select v-model="endMin">
-                <option v-for="m in minutes" :key="m" :value="m">{{ m }}</option>
-              </select>
-              <select v-model="endAmpm">
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="settings-modal-actions drawer-actions">
-          <button @click="guardarHorario" class="settings-save">{{ t('settings.save') }}</button>
-          <button @click="showHorarioModal = false" class="settings-cancel">{{ t('settings.cancel') }}</button>
-        </div>
-      </div>
-    </div>
+    <!-- antes había un drawer; ahora usamos un popover compacto dentro de .settings-horario -->
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -145,6 +144,8 @@ const horario = ref(initialState.horario)
 const showToast = ref(false)
 const showModal = ref(false)
 const showHorarioModal = ref(false)
+const editBtn = ref(null)
+const popoverEl = ref(null)
 
 // Selectores de tiempo (estilo alarma)
 const hours = Array.from({ length: 12 }).map((_, i) => String(i + 1).padStart(2, '0'))
@@ -230,6 +231,23 @@ function guardarHorario() {
   horario.value = `${startHour.value}:${startMin.value} ${startAmpm.value} - ${endHour.value}:${endMin.value} ${endAmpm.value}`
   showHorarioModal.value = false
 }
+
+function onDocClick(e) {
+  if (!showHorarioModal.value) return
+  const pop = popoverEl.value
+  const btn = editBtn.value
+  if (pop && (pop.contains(e.target))) return
+  if (btn && (btn.contains(e.target))) return
+  showHorarioModal.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('click', onDocClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick)
+})
 </script>
 
 <style scoped>
@@ -295,6 +313,7 @@ function guardarHorario() {
   align-items: center;
   gap: 1rem;
   font-size: 1rem;
+  position: relative; /* para posicionar el popover */
 }
 .settings-edit-btn {
   background: #111;
@@ -382,53 +401,73 @@ function guardarHorario() {
   width: 80%;
 }
 
-/* Drawer lateral para editar horario */
-.settings-drawer-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.18);
-  z-index: 2100;
-  display: flex;
-  justify-content: flex-end;
-}
-.settings-drawer {
-  width: 380px;
-  max-width: 90%;
+/* Popover compacto (burbuja) junto al botón Editar */
+.settings-popover {
+  position: absolute;
+  top: calc(100% + 8px); /* justo debajo del botón */
+  right: 0;
+  width: 220px; /* más compacta */
   background: #fff;
-  padding: 1.5rem 1.8rem;
-  box-shadow: -6px 2px 24px rgba(0,0,0,0.14);
-  border-left: 1px solid #e6eef6;
-  animation: slideIn 220ms ease-out;
+  border-radius: 10px;
+  border: 1px solid #e9f0f7;
+  box-shadow: 0 6px 18px rgba(4,24,44,0.12);
+  padding: 0.5rem;
+  z-index: 2200;
+  font-size: 0.92rem;
 }
-@keyframes slideIn {
-  from { transform: translateX(20px); opacity: 0 }
-  to { transform: translateX(0); opacity: 1 }
-}
-.time-pickers {
+.time-pickers-compact {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.4rem;
 }
-.time-picker label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
+.time-picker-compact label {
+  font-size: 0.75rem;
+  color: #122;
+  margin-bottom: 0.18rem;
 }
-.picker-row {
+.picker-row-compact {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.35rem;
   align-items: center;
 }
-.picker-row select {
-  padding: 0.6rem 0.8rem;
-  border: 1.5px solid #b6c6d6;
-  border-radius: 8px;
-  background: #fff;
-  font-size: 1rem;
+.picker-row-compact select {
+  padding: 0.28rem 0.4rem;
+  border: 1px solid #dbe7f2;
+  border-radius: 6px;
+  font-size: 0.88rem;
 }
-.drawer-actions {
+.picker-row-compact select.hour,
+.picker-row-compact select.min {
+  min-width: 44px;
+  max-width: 52px;
+}
+.picker-row-compact select.ampm {
+  min-width: 46px;
+}
+.popover-actions {
+  display: flex;
   justify-content: flex-end;
-  margin-top: 1.4rem;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
 }
+
+/* Estilos específicos para botones dentro del popover (más compactos) */
+.settings-popover .settings-save,
+.settings-popover .settings-cancel {
+  padding: 0.28rem 0.6rem;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  line-height: 1;
+}
+.settings-popover .settings-save {
+  background: #0a2c47;
+  color: #fff;
+  border: none;
+}
+.settings-popover .settings-cancel {
+  background: #fff;
+  color: #0a2c47;
+  border: 1px solid #0a2c47;
+}
+.popover-actions { flex-wrap: wrap; }
 </style>
