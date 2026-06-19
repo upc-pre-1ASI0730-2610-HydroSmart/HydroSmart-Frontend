@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+# Grant the workflow explicit write permissions so GITHUB_TOKEN can push
+permissions:
+  contents: write
+  pages: write
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # ensure the checkout action keeps credentials available for later git push
+          persist-credentials: true
+          # fetch full history (optional but useful for some deploy flows)
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+

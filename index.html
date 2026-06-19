@@ -2,9 +2,18 @@
 <html lang="">
   <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
+    <!-- Use root-relative favicon path so it resolves correctly in Netlify and builds -->
+    <link rel="icon" href="/favicon.ico" onerror="this.remove()">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <title>HydroSmart</title>
+    <script>
+      // Handle redirect from 404.html for SPA routing
+      if (sessionStorage.redirect) {
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        history.replaceState(null, null, redirect);
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -1,9 +1,10 @@
 import { ref } from 'vue'
 
-import { fetchProfileById, updateProfileById } from '../infrastructure/profile-api.js'
-import { toProfile } from '../infrastructure/profile.assembler.js'
+import { fetchProfileById, updateProfileById, createProfile, fetchAllProfiles } from '../infrastructure/profile-api.js'
+import { toProfile, toApiModel } from '../infrastructure/profile.assembler.js'
 
 const profile = ref(null)
+const profiles = ref([])
 const isLoading = ref(false)
 const error = ref('')
 const lastLoadedId = ref(null)
@@ -31,6 +32,21 @@ export function useProfileStore() {
     }
   }
 
+  const loadAllProfiles = async () => {
+    isLoading.value = true
+    error.value = ''
+
+    try {
+      const apiModels = await fetchAllProfiles()
+      profiles.value = Array.isArray(apiModels) ? apiModels.map(toProfile) : []
+    } catch (err) {
+      profiles.value = []
+      error.value = err instanceof Error ? err.message : 'Error al cargar los perfiles'
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const saveProfile = async (id, updates) => {
     if (!id) {
       return
@@ -52,13 +68,42 @@ export function useProfileStore() {
     }
   }
 
+  const addProfile = async (profileData) => {
+    isSaving.value = true
+    saveError.value = ''
+
+    try {
+      const apiModel = await createProfile(profileData)
+      const newProfile = toProfile(apiModel)
+      profiles.value.push(newProfile)
+      return newProfile
+    } catch (err) {
+      saveError.value = err instanceof Error ? err.message : 'Error al crear el perfil'
+      throw err
+    } finally {
+      isSaving.value = false
+    }
+  }
+
+  const clearProfile = () => {
+    profile.value = null
+    lastLoadedId.value = null
+    error.value = ''
+  }
+
   return {
     profile,
+    profiles,
     isLoading,
     error,
     isSaving,
     saveError,
     loadProfile,
-    saveProfile
+    loadAllProfiles,
+    saveProfile,
+    addProfile,
+    clearProfile
   }
 }
+
+
