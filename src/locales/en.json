@@ -239,5 +239,25 @@
     "saved": "Data saved successfully",
     "cancelConfirm": "Are you sure you want to cancel?",
     "no": "No"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Enter your credentials to continue",
+      "usernameLabel": "Email or username",
+      "usernamePlaceholder": "Email or username",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign in",
+      "forgotPassword": "Forgot your password?"
+    },
+    "forgot": {
+      "title": "Reset password",
+      "subtitle": "We will send a reset link once backend integration is ready.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "submit": "Send link",
+      "backToLogin": "Back to sign in"
+    }
   }
 }
