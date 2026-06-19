@@ -1,16 +1,28 @@
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_REPORTS_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001';
+const buildUrl = (path) => `${API_BASE_URL}${path}`;
+
+const getAuthToken = () => localStorage.getItem('authToken');
+
+const getHeaders = () => ({
+  'Content-Type': 'application/json',
+  ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` }),
+});
 
 export const reportApi = {
   async getReports() {
-    const response = await fetch(`${API_BASE_URL}/reports`);
+    const response = await fetch(buildUrl('/reports'), {
+      headers: getHeaders(),
+    });
     if (!response.ok) {
-      throw new Error('Error al obtener reportes');
+      throw new Error(`Error al obtener reportes (${response.status})`);
     }
     return response.json();
   },
 
   async getReportById(id) {
-    const response = await fetch(`${API_BASE_URL}/reports/${id}`);
+    const response = await fetch(buildUrl(`/reports/${id}`), {
+      headers: getHeaders(),
+    });
     if (!response.ok) {
       throw new Error('Error al obtener reporte');
     }
@@ -18,11 +30,9 @@ export const reportApi = {
   },
 //
   async createReport(reportData) {
-    const response = await fetch(`${API_BASE_URL}/reports`, {
+    const response = await fetch(buildUrl('/reports'), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getHeaders(),
       body: JSON.stringify(reportData),
     });
     if (!response.ok) {
@@ -32,11 +42,9 @@ export const reportApi = {
   },
 
   async updateReport(id, reportData) {
-    const response = await fetch(`${API_BASE_URL}/reports/${id}`, {
+    const response = await fetch(buildUrl(`/reports/${id}`), {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getHeaders(),
       body: JSON.stringify(reportData),
     });
     if (!response.ok) {
@@ -46,8 +54,9 @@ export const reportApi = {
   },
 
   async deleteReport(id) {
-    const response = await fetch(`${API_BASE_URL}/reports/${id}`, {
+    const response = await fetch(buildUrl(`/reports/${id}`), {
       method: 'DELETE',
+      headers: getHeaders(),
     });
     if (!response.ok) {
       throw new Error('Error al eliminar reporte');
