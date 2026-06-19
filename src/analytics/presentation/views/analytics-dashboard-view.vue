@@ -6,7 +6,7 @@
         <div class="metric-card__icon">💧</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.waterConsumption') }}</p>
-          <p class="metric-card__value">8000 {{ t('app.unit.liters') }}</p>
+          <p class="metric-card__value">{{ dashboard.monthlyConsumptionLiters }} {{ t('app.unit.liters') }}</p>
           <p class="metric-card__subtitle">{{ t('dashboard.monthlySavingGoal') }}</p>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <div class="metric-card__icon">🎯</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.estimatedSavings') }}</p>
-          <p class="metric-card__value">-25%</p>
+          <p class="metric-card__value">{{ dashboard.estimatedSavingsPercentage }}%</p>
           <p class="metric-card__subtitle">{{ t('app.consumption') }}</p>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <div class="metric-card__icon">📄</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.estimatedBill') }}</p>
-          <p class="metric-card__value">S/. 45.30</p>
+          <p class="metric-card__value">S/. {{ dashboard.estimatedBill.toFixed(2) }}</p>
           <p class="metric-card__subtitle">&nbsp;</p>
         </div>
       </div>
@@ -42,7 +42,7 @@
         <div class="metric-card__icon">📊</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.todayConsumption') }}</p>
-          <p class="metric-card__value">265 {{ t('app.unit.liters') }}</p>
+          <p class="metric-card__value">{{ dashboard.todayConsumptionLiters }} {{ t('app.unit.liters') }}</p>
           <p class="metric-card__subtitle">&nbsp;</p>
         </div>
       </div>
@@ -128,8 +128,11 @@
 import { useI18n } from 'vue-i18n'
 import { onMounted } from 'vue'
 import Chart from 'chart.js/auto'
+import { useAnalyticsStore } from '../../application/analytics.store.js'
 
 const { t } = useI18n()
+const { dashboard, loadDashboard } = useAnalyticsStore()
+const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
 
 let dailyChart = null
 let categoryChart = null
@@ -164,14 +167,16 @@ const initializeDailyConsumptionChart = () => {
     dailyChart.destroy()
   }
 
+  const daily = dashboard.value.dailyConsumption
+
   dailyChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['00:00 - 05:00', '05:00 - 10:00', '10:00 AM - 2:00 PM', '2:00 PM - 6:00 PM', '6:00 PM - 10:00 PM', '10:00 PM - 00:00 AM', '24:00 - 00:00 AM'],
+      labels: daily.map((d) => d.timeBlock),
       datasets: [
         {
           label: 'Litros',
-          data: [10, 85, 35, 30, 95, 10, 0],
+          data: daily.map((d) => d.liters),
           borderColor: '#3b82f6',
           backgroundColor: 'rgba(59, 130, 246, 0.1)',
           borderWidth: 2,
@@ -199,7 +204,6 @@ const initializeDailyConsumptionChart = () => {
       scales: {
         y: {
           beginAtZero: true,
-          max: 120,
           ticks: {
             stepSize: 20,
             callback: function(value) {
@@ -236,26 +240,16 @@ const initializeCategoryConsumptionChart = () => {
     categoryChart.destroy()
   }
 
+  const breakdown = dashboard.value.categoryBreakdown
+
   categoryChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: [
-        t('dashboard.categories.showers'),
-        t('dashboard.categories.toilets'),
-        t('dashboard.categories.filters'),
-        t('dashboard.categories.others'),
-        t('dashboard.categories.faucets')
-      ],
+      labels: breakdown.map((c) => t('dashboard.categories.' + c.categoryKey)),
       datasets: [
         {
-          data: [30, 25, 15, 10, 20],
-          backgroundColor: [
-            '#60a5fa',
-            '#1e40af',
-            '#5b91c9',
-            '#a0c4dd',
-            '#1e3a8a'
-          ],
+          data: breakdown.map((c) => c.liters),
+          backgroundColor: ['#60a5fa', '#1e40af', '#5b91c9', '#a0c4dd', '#1e3a8a'],
           borderColor: '#fff',
           borderWidth: 2
         }
@@ -288,20 +282,17 @@ const initializeMonthlyConsumptionChart = () => {
     monthlyChart.destroy()
   }
 
+  const monthly = dashboard.value.monthlyComparison
+
   monthlyChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Jun', 'Jul', 'Ago', 'Sep'],
+      labels: monthly.map((m) => m.month),
       datasets: [
         {
           label: 'Consumo (Litros)',
-          data: [3500, 4200, 3200, 2800],
-          backgroundColor: [
-            '#60a5fa',
-            '#3b82f6',
-            '#5b91c9',
-            '#a0c4dd'
-          ],
+          data: monthly.map((m) => m.liters),
+          backgroundColor: ['#60a5fa', '#3b82f6', '#5b91c9', '#a0c4dd'],
           borderRadius: 6,
           borderSkipped: false
         }
@@ -345,7 +336,8 @@ const initializeMonthlyConsumptionChart = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadDashboard(profileId)
   initializeDailyConsumptionChart()
   initializeCategoryConsumptionChart()
   initializeMonthlyConsumptionChart()
