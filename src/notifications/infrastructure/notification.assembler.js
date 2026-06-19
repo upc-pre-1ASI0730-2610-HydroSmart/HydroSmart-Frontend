@@ -10,8 +10,20 @@ export function toNotification(apiModel) {
     userId: Number(apiModel.userId) || null,
     title: apiModel.title ?? '',
     message: apiModel.message ?? '',
-    type: apiModel.type ?? 'info',
-    timestamp: apiModel.timestamp ?? '',
+    type: apiModel.type?.toLowerCase() ?? 'info',
+    timestamp: apiModel.createdAt ?? '',
     isRead: Boolean(apiModel.isRead)
   })
 }
+
+export function toApiModel(notification) {
+  if (!notification) return null
+
+  return {
+    userId: notification.userId,
+    title: notification.title ?? '',
+    message: notification.message ?? '',
+    type: notification.type?.toUpperCase() ?? 'INFO'
+  }
+}
+
