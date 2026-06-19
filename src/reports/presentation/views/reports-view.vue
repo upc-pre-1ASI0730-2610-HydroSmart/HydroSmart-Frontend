@@ -79,6 +79,37 @@
 
     </div>
 
+    <div class="reports-list-card">
+      <div class="reports-list-card__header">
+        <h2 class="reports-list-card__title">Reportes del backend</h2>
+        <span class="reports-list-card__count">{{ reportRows.length }}</span>
+      </div>
+
+      <p v-if="loading" class="reports-list-card__state">Cargando reportes...</p>
+      <p v-else-if="error" class="reports-list-card__state reports-list-card__state--error">{{ error }}</p>
+      <p v-else-if="reportRows.length === 0" class="reports-list-card__state">No hay reportes registrados.</p>
+
+      <div v-else class="reports-table-wrap">
+        <table class="reports-table">
+          <thead>
+            <tr>
+              <th>Titulo</th>
+              <th>Descripcion</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="report in reportRows" :key="report.id">
+              <td>{{ report.title }}</td>
+              <td>{{ report.description }}</td>
+              <td>{{ formatReportDate(report.date) }}</td>
+              <td>{{ reportTypeLabel(report.type) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <!-- Export section -->
     <div class="export-card">
       <h2 class="export-card__title">{{ t('reports.export.title') }}</h2>
@@ -115,10 +146,24 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useReportStore } from '../../application/report.store.js'
 
 const { t } = useI18n()
+const { reports, loading, error, fetchReports } = useReportStore()
+
+onMounted(fetchReports)
+
+const reportRows = computed(() => reports.value)
+
+const formatReportDate = (date) => {
+  if (!date) return '-'
+
+  return new Date(date).toLocaleDateString('es-PE')
+}
+
+const reportTypeLabel = (type) => typeof type === 'number' ? 'Report #' + type : type
 
 const deviceRanking = ref([
   { name: 'Lavabo Cocina 1', value: 14200 },
@@ -426,6 +471,72 @@ const handleDownload = () => {
 
 .bar-v-col__label { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
 
+.reports-list-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.reports-list-card__header {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.reports-list-card__title {
+  color: #0f172a;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.reports-list-card__count {
+  align-items: center;
+  background: #eff6ff;
+  border-radius: 999px;
+  color: #1e3a8a;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 700;
+  height: 1.75rem;
+  justify-content: center;
+  min-width: 1.75rem;
+  padding: 0 0.5rem;
+}
+
+.reports-list-card__state {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.reports-list-card__state--error { color: #b91c1c; }
+
+.reports-table-wrap { overflow-x: auto; }
+
+.reports-table {
+  border-collapse: collapse;
+  min-width: 640px;
+  width: 100%;
+}
+
+.reports-table th,
+.reports-table td {
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.88rem;
+  padding: 0.75rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.reports-table th {
+  color: #0f172a;
+  font-weight: 700;
+}
 /* Export */
 .export-card {
   background: #ffffff;

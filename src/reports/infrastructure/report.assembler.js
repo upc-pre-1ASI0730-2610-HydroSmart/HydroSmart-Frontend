@@ -6,8 +6,8 @@ export const reportAssembler = {
       data.id,
       data.title,
       data.description,
-      data.date,
-      data.type
+      data.date || data.generatedAt || data.startDate,
+      data.typeName || data.type
     );
   },
 ///
