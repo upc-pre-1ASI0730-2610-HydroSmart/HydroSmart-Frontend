@@ -239,5 +239,25 @@
     "saved": "Datos guardados correctamente",
     "cancelConfirm": "¿Seguro que deseas cancelar?",
     "no": "No"
+  },
+  "auth": {
+    "login": {
+      "title": "Inicia sesion",
+      "subtitle": "Ingresa para continuar",
+      "usernameLabel": "Correo electronico o usuario",
+      "usernamePlaceholder": "Correo electronico o usuario",
+      "passwordLabel": "Contrasena",
+      "passwordPlaceholder": "Contrasena",
+      "submit": "Iniciar sesion",
+      "forgotPassword": "Olvidaste tu contrasena?"
+    },
+    "forgot": {
+      "title": "Recuperar contrasena",
+      "subtitle": "Te enviaremos un enlace cuando conectemos el backend.",
+      "emailLabel": "Correo electronico",
+      "emailPlaceholder": "Ingresa tu correo electronico",
+      "submit": "Enviar enlace",
+      "backToLogin": "Volver a iniciar sesion"
+    }
   }
 }

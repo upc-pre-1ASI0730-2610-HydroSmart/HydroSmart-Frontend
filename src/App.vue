@@ -1,19 +1,24 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { useProfileStore } from './profiles/application/profile.store.js'
 import { useNotificationStore } from './notifications/application/notificacion.store.js'
+import { useAuthStore } from './auth/application/auth.store.js'
 
 const { t, locale } = useI18n()
 const now = ref(new Date())
 const userName = computed(() => t('app.userName'))
+const route = useRoute()
+const router = useRouter()
+const { isAuthenticated, currentUser, logout } = useAuthStore()
 
 const { profile, loadProfile } = useProfileStore()
 const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
 
-const displayName = computed(() => profile.value?.fullName || userName.value)
+const displayName = computed(() => profile.value?.fullName || currentUser.value || userName.value)
 const displayPhoto = computed(() => profile.value?.profilePhotoUrl || '')
+const isAuthLayout = computed(() => route.matched.some((record) => record.meta?.layout === 'auth'))
 
 const isNotificationsOpen = ref(false)
 const { notifications, isLoading: isNotificationsLoading, error: notificationsError, loadNotifications } = useNotificationStore()
@@ -86,12 +91,20 @@ const onOverlayClick = (event) => {
   }
 }
 
+const onLogout = async () => {
+  logout()
+  closeNotifications()
+  await router.push('/login')
+}
+
 onMounted(() => {
   timerId = window.setInterval(() => {
     now.value = new Date()
   }, 1000)
 
-  loadProfile(profileId)
+  if (isAuthenticated.value) {
+    loadProfile(profileId)
+  }
 })
 
 onUnmounted(() => {
@@ -100,7 +113,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-shell">
+  <div v-if="!isAuthLayout" class="app-shell">
     <aside class="sidebar">
       <img class="sidebar__logo" src="/logo-hydrosmart.png" :alt="t('app.logoAlt')" />
 
@@ -122,7 +135,7 @@ onUnmounted(() => {
         </RouterLink>
       </nav>
 
-      <button class="nav-logout" type="button">
+      <button class="nav-logout" type="button" @click="onLogout">
         {{ t('app.logout') }}
         <span class="nav-logout__icon" aria-hidden="true">⇦</span>
       </button>
@@ -208,6 +221,7 @@ onUnmounted(() => {
       </section>
     </main>
   </div>
+  <RouterView v-else />
 </template>
 
 <style scoped>
