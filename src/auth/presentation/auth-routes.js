@@ -1,4 +1,5 @@
 import LoginView from './views/login-view.vue'
+import SignUpView from './views/signup-view.vue'
 import ForgotPasswordView from './views/forgot-password-view.vue'
 
 export const authRoutes = [
@@ -6,6 +7,15 @@ export const authRoutes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    meta: {
+      public: true,
+      layout: 'auth'
+    }
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: SignUpView,
     meta: {
       public: true,
       layout: 'auth'

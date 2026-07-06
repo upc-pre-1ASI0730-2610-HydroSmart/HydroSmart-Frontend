@@ -9,11 +9,12 @@ const router = useRouter()
 const route = useRoute()
 const { login, isAuthenticated } = useAuthStore()
 
-const username = ref('')
+const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const isLoading = ref(false)
 
-const isFormDisabled = computed(() => !username.value.trim() || !password.value.trim())
+const isFormDisabled = computed(() => !email.value.trim() || !password.value.trim())
 const redirectTo = computed(() => {
   const destination = route.query.redirect
   return typeof destination === 'string' && destination.length > 0 ? destination : '/dashboard'
@@ -23,19 +24,22 @@ if (isAuthenticated.value) {
   router.replace(redirectTo.value)
 }
 
-const submitLogin = () => {
+const submitLogin = async () => {
   errorMessage.value = ''
+  isLoading.value = true
 
-  const result = login({
-    username: username.value,
+  const result = await login({
+    email: email.value,
     password: password.value
   })
 
   if (!result.success) {
     errorMessage.value = result.message
+    isLoading.value = false
     return
   }
 
+  isLoading.value = false
   router.push(redirectTo.value)
 }
 </script>
@@ -52,9 +56,9 @@ const submitLogin = () => {
         <label class="auth-field">
           <span>{{ t('auth.login.usernameLabel') }}</span>
           <input
-            v-model="username"
-            type="text"
-            autocomplete="username"
+            v-model="email"
+            type="email"
+            autocomplete="email"
             :placeholder="t('auth.login.usernamePlaceholder')"
           />
         </label>
@@ -71,14 +75,20 @@ const submitLogin = () => {
 
         <p v-if="errorMessage" class="auth-error">{{ errorMessage }}</p>
 
-        <button class="auth-submit" type="submit" :disabled="isFormDisabled">
-          {{ t('auth.login.submit') }}
+        <button class="auth-submit" type="submit" :disabled="isFormDisabled || isLoading">
+          {{ isLoading ? 'Iniciando...' : t('auth.login.submit') }}
         </button>
       </form>
 
-      <RouterLink class="auth-link" to="/forgot-password">
-        {{ t('auth.login.forgotPassword') }}
-      </RouterLink>
+      <div class="auth-footer">
+        <RouterLink class="auth-link" to="/forgot-password">
+          {{ t('auth.login.forgotPassword') }}
+        </RouterLink>
+        <span class="auth-divider">•</span>
+        <RouterLink class="auth-link" to="/signup">
+          Crear cuenta
+        </RouterLink>
+      </div>
     </section>
   </main>
 </template>
@@ -177,12 +187,29 @@ const submitLogin = () => {
   opacity: 0.6;
 }
 
-.auth-link {
-  color: #0d2d5f;
+.auth-footer {
+  color: #4b5563;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   font-weight: 600;
   margin-top: 0.55rem;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-link {
+  color: #0d2d5f;
+  font-weight: 700;
   text-decoration: underline;
+}
+
+.auth-link:hover {
+  opacity: 0.8;
+}
+
+.auth-divider {
+  color: #ccc;
 }
 </style>
 

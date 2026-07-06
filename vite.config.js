@@ -22,4 +22,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://hydrosmart-backend-jlh9.onrender.com',
+        changeOrigin: true,
+        rewrite: (path) => path,
+      }
+    }
+  }
 })

@@ -1,45 +1,92 @@
 import { ref } from 'vue'
-
-const ALLOWED_USER = 'Yeira'
-const ALLOWED_PASSWORD = 'admin123'
+import { signIn, signUp, logout as apiLogout } from '../infrastructure/auth-api.js'
 
 const isAuthenticated = ref(false)
 const currentUser = ref('')
+const authError = ref('')
 
 export function useAuthStore() {
-  const login = ({ username, password }) => {
-    const normalizedUsername = String(username || '').trim()
-    const normalizedPassword = String(password || '').trim()
-
-    const isValidCredentials = normalizedUsername === ALLOWED_USER && normalizedPassword === ALLOWED_PASSWORD
-
-    if (!isValidCredentials) {
-      isAuthenticated.value = false
-      currentUser.value = ''
+  const login = async ({ email, password }) => {
+    try {
+      authError.value = ''
+      const response = await signIn({ email, password })
+      
+      if (response.token) {
+        localStorage.setItem('authToken', response.token)
+        isAuthenticated.value = true
+        currentUser.value = response.email || email
+        
+        return {
+          success: true,
+          message: ''
+        }
+      }
+      
       return {
         success: false,
-        message: 'Usuario o contrasena incorrectos.'
+        message: response.message || 'Error al iniciar sesión'
       }
-    }
-
-    isAuthenticated.value = true
-    currentUser.value = ALLOWED_USER
-
-    return {
-      success: true,
-      message: ''
+    } catch (error) {
+      authError.value = error.message
+      isAuthenticated.value = false
+      currentUser.value = ''
+      
+      return {
+        success: false,
+        message: error.message || 'Error al iniciar sesión'
+      }
     }
   }
 
-  const logout = () => {
-    isAuthenticated.value = false
-    currentUser.value = ''
+  const register = async ({ email, password, role = 'user' }) => {
+    try {
+      authError.value = ''
+      const response = await signUp({ email, password, role })
+      
+      if (response.token) {
+        localStorage.setItem('authToken', response.token)
+        isAuthenticated.value = true
+        currentUser.value = response.email || email
+        
+        return {
+          success: true,
+          message: 'Registro exitoso'
+        }
+      }
+      
+      return {
+        success: false,
+        message: response.message || 'Error al registrarse'
+      }
+    } catch (error) {
+      authError.value = error.message
+      
+      return {
+        success: false,
+        message: error.message || 'Error al registrarse'
+      }
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await apiLogout()
+    } catch (error) {
+      console.error('Error en logout:', error)
+    } finally {
+      isAuthenticated.value = false
+      currentUser.value = ''
+      localStorage.removeItem('authToken')
+      authError.value = ''
+    }
   }
 
   return {
     isAuthenticated,
     currentUser,
+    authError,
     login,
+    register,
     logout
   }
 }
