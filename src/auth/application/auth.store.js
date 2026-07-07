@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { signIn, signUp } from '../infrastructure/auth-api.js'
+import { signIn, signUp, logout as logoutRequest } from '../infrastructure/auth-api.js'
 
 const STORAGE_KEY = 'hydrosmart.session'
 
@@ -86,7 +86,7 @@ const applySession = (data) => {
 }
 
 const restoreSession = () => {
-  const session = readSession()
+  const session = loadSession()
 
   if (!session || !session.token) {
     clearSession()

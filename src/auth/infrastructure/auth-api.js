@@ -1,4 +1,4 @@
-import { buildUrl } from '@/shared/infrastructure/api-config.js'
+import { buildApiUrl } from '@/shared/infrastructure/api-config.js'
 
 const extractTokenFromResponse = (data) => {
   if (!data) return null
