@@ -4,6 +4,30 @@ const buildUrl = (path) => {
   return `${API_BASE_URL}${path}`
 }
 
+const extractTokenFromResponse = (data) => {
+  if (!data) return null
+  return (
+    data.token ||
+    data.accessToken ||
+    data.access_token ||
+    data.jwtToken ||
+    data.jwt ||
+    (data.data && (data.data.token || data.data.accessToken || data.data.access_token)) ||
+    null
+  )
+}
+
+const saveTokenToLocal = (token) => {
+  try {
+    if (!token) return
+    localStorage.setItem('authToken', token)
+    // also keep simple 'token' key for compatibility
+    localStorage.setItem('token', token)
+  } catch (e) {
+    // ignore
+  }
+}
+
 export async function signIn({ email, password }) {
   if (!API_BASE_URL) {
     throw new Error('API base URL no configurada')
@@ -27,6 +51,11 @@ export async function signIn({ email, password }) {
 
     if (!response.ok) {
       throw new Error(data.message || 'Error al iniciar sesión')
+    }
+
+    const token = extractTokenFromResponse(data)
+    if (token) {
+      saveTokenToLocal(token)
     }
 
     return data
@@ -68,6 +97,11 @@ export async function signUp({ email, password, role = 'user' }) {
       throw new Error(data.message || `Error ${response.status}: ${data.error || 'Error al registrarse'}`)
     }
 
+    const token = extractTokenFromResponse(data)
+    if (token) {
+      saveTokenToLocal(token)
+    }
+
     return data
   } catch (error) {
     console.error('SignUp error:', error)
@@ -89,6 +123,9 @@ export async function logout() {
         'Content-Type': 'application/json'
       }
     })
+
+    // clear local token on logout
+    try { localStorage.removeItem('authToken'); localStorage.removeItem('token') } catch (e) {}
 
     return response.ok
   } catch (error) {

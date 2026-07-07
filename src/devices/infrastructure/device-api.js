@@ -10,10 +10,29 @@ const buildUrl = (path) => {
     return `${API_BASE_URL}${path}`
 }
 
+const getAuthToken = () => {
+  return localStorage.getItem('authToken')
+}
+
+const getHeaders = (isFormData = false) => {
+  const headers = {
+    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
+  }
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json'
+  }
+
+  return headers
+}
+
 export async function fetchDevices() {
     if (API_BASE_URL) {
         try {
-            const response = await fetch(buildUrl('/devices'))
+            const response = await fetch(buildUrl('/api/v1/devices'), {
+              method: 'GET',
+              headers: getHeaders()
+            })
 
             if (response.ok) {
                 return response.json()
