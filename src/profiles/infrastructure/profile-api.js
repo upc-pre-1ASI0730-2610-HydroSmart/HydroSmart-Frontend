@@ -1,4 +1,24 @@
-import { buildApiUrl, getJsonHeaders } from '@/shared/infrastructure/api-config.js'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001'
+
+const buildUrl = (path) => {
+  return `${API_BASE_URL}${path}`
+}
+
+const getAuthToken = () => {
+  return localStorage.getItem('authToken')
+}
+
+const getHeaders = (isFormData = false) => {
+  const headers = {
+    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
+  }
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json'
+  }
+
+  return headers
+}
 
 export async function fetchProfileById(id) {
   const numericId = Number(id)

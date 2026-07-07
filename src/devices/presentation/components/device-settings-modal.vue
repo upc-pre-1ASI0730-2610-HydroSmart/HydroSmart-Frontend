@@ -76,6 +76,16 @@
       </form>
       <p v-if="saveError" class="status error">{{ saveError }}</p>
       <p v-else-if="saveSuccess" class="status success">{{ t('devices.saved') }}</p>
+      <footer class="modal-actions">
+        <button
+            class="danger-button"
+            type="button"
+            :disabled="isSaving"
+            @click="emit('delete', device.id)"
+        >
+          Eliminar dispositivo
+        </button>
+      </footer>
     </div>
   </div>
 </template>
@@ -99,7 +109,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits(['close', 'save', 'delete'])
 const { t } = useI18n()
 
 const isEditing = ref(false)
@@ -134,7 +144,11 @@ const toggleEdit = async () => {
     id: props.device.id,
     updates: {
       name: form.name,
-      section: form.section
+      section: form.section,
+      status: form.status || props.device.status || 'inactive',
+      lastActive: form.lastActive || props.device.lastActive || '0 h',
+      alerts: Number(form.alerts ?? props.device.alerts ?? 0),
+      consumption: Number(form.consumption ?? props.device.consumption ?? 0)
     }
   })
 
@@ -149,6 +163,7 @@ watch(
     },
     { immediate: true }
 )
+
 </script>
 
 <style scoped>
@@ -240,5 +255,26 @@ watch(
 
 .status.success {
   color: #15803d;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.danger-button {
+  background: #dc2626;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+}
+
+.danger-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 </style>

@@ -11,7 +11,7 @@ const { register, isAuthenticated } = useAuthStore()
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const role = ref('user')
+const role = ref('User')
 const errorMessage = ref('')
 const isLoading = ref(false)
 
@@ -126,9 +126,9 @@ const submitSignUp = async () => {
         <label class="auth-field">
           <span>Rol (opcional)</span>
           <select v-model="role" class="auth-select">
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-            <option value="technician">Técnico</option>
+            <option value="User">Usuario</option>
+            <option value="Admin">Administrador</option>
+            <option value="Technician">Técnico</option>
           </select>
         </label>
 

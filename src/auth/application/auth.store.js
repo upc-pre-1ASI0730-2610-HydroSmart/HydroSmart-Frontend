@@ -1,53 +1,81 @@
 import { ref } from 'vue'
+import { signIn, signUp } from '../infrastructure/auth-api.js'
 
-import { logout as logoutRequest, signIn, signUp } from '../infrastructure/auth-api.js'
-
-const SESSION_KEY = 'hydrosmart.session'
+const STORAGE_KEY = 'hydrosmart.session'
 
 const isAuthenticated = ref(false)
 const currentUser = ref('')
 const currentUserId = ref(null)
 const authError = ref('')
 
-const readSession = () => {
-  const rawSession = localStorage.getItem(SESSION_KEY)
+const getStorage = () => {
+  if (typeof window === 'undefined') return null
+  return window.localStorage
+}
 
-  if (!rawSession) {
-    return null
+const saveSession = (session) => {
+  const storage = getStorage()
+  if (!storage) return
+
+  storage.setItem(STORAGE_KEY, JSON.stringify(session))
+
+  if (session.token) {
+    storage.setItem('authToken', session.token)
+    storage.setItem('token', session.token)
   }
+}
+
+const loadSession = () => {
+  const storage = getStorage()
+  if (!storage) return null
+
+  const raw = storage.getItem(STORAGE_KEY)
+  if (!raw) return null
 
   try {
-    return JSON.parse(rawSession)
+    return JSON.parse(raw)
   } catch {
     return null
   }
 }
 
-const saveSession = (session) => {
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-  localStorage.setItem('authToken', session.token)
-  localStorage.setItem('token', session.token)
-}
-
 const clearSession = () => {
-  localStorage.removeItem(SESSION_KEY)
-  localStorage.removeItem('authToken')
-  localStorage.removeItem('token')
+  const storage = getStorage()
+  if (!storage) return
+
+  storage.removeItem(STORAGE_KEY)
+  storage.removeItem('authToken')
+  storage.removeItem('token')
+  storage.removeItem('hydrosmart.mockUsers')
+  storage.removeItem('hydrosmart.mockSession')
 }
 
-const applySession = (data, fallbackEmail = '') => {
-  const token = data?.token || data?.accessToken || data?.access_token
+const createDisplayName = (email) => {
+  const localPart = String(email || '')
+      .split('@')[0]
+      .replace(/[._-]+/g, ' ')
+      .trim()
 
-  if (!token) {
-    throw new Error('El backend no devolvio un token de autenticacion')
-  }
+  if (!localPart) return 'Usuario HydroSmart'
 
+  return localPart
+      .split(' ')
+      .map((part) => part ? part.charAt(0).toUpperCase() + part.slice(1) : '')
+      .join(' ')
+}
+
+const applySession = (data) => {
   const session = {
-    id: data?.id ?? null,
-    email: data?.email ?? fallbackEmail,
-    role: data?.role ?? 'user',
-    token
+    id: data.id,
+    email: data.email,
+    role: data.role,
+    token: data.token,
+    name: createDisplayName(data.email),
+    loginAt: new Date().toISOString()
   }
+
+  isAuthenticated.value = true
+  currentUser.value = session.name
 
   saveSession(session)
   isAuthenticated.value = true
@@ -60,7 +88,7 @@ const applySession = (data, fallbackEmail = '') => {
 const restoreSession = () => {
   const session = readSession()
 
-  if (!session?.token) {
+  if (!session || !session.token) {
     clearSession()
     return
   }
@@ -79,8 +107,12 @@ export function useAuthStore() {
     authError.value = ''
 
     try {
-      const data = await signIn({ email, password })
-      const session = applySession(data, email)
+      const data = await signIn({
+        email: String(email || '').trim(),
+        password: String(password || '').trim()
+      })
+
+      const session = applySession(data)
 
       return {
         success: true,
@@ -88,11 +120,11 @@ export function useAuthStore() {
         user: session
       }
     } catch (error) {
-      clearSession()
       isAuthenticated.value = false
       currentUser.value = ''
-      currentUserId.value = null
-      authError.value = error instanceof Error ? error.message : 'Usuario o contrasena incorrectos.'
+      clearSession()
+
+      authError.value = error.message || 'Usuario o contraseña incorrectos.'
 
       return {
         success: false,
@@ -101,25 +133,33 @@ export function useAuthStore() {
     }
   }
 
-  const register = async ({ email, password, role = 'user' }) => {
+  const register = async ({ email, password, role = 'User' }) => {
     authError.value = ''
 
     try {
-      await signUp({ email, password, role })
-      const data = await signIn({ email, password })
-      const session = applySession(data, email)
+      const cleanEmail = String(email || '').trim()
+      const cleanPassword = String(password || '').trim()
+
+      await signUp({
+        email: cleanEmail,
+        password: cleanPassword,
+        role
+      })
+
+      const data = await signIn({
+        email: cleanEmail,
+        password: cleanPassword
+      })
+
+      const session = applySession(data)
 
       return {
         success: true,
-        message: '',
+        message: 'Registro exitoso',
         user: session
       }
     } catch (error) {
-      clearSession()
-      isAuthenticated.value = false
-      currentUser.value = ''
-      currentUserId.value = null
-      authError.value = error instanceof Error ? error.message : 'Error al crear la cuenta.'
+      authError.value = error.message || 'Error al crear la cuenta'
 
       return {
         success: false,

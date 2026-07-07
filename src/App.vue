@@ -21,8 +21,14 @@ const displayPhoto = computed(() => profile.value?.profilePhotoUrl || '')
 const isAuthLayout = computed(() => route.matched.some((record) => record.meta?.layout === 'auth'))
 
 const isNotificationsOpen = ref(false)
-const { notifications, isLoading: isNotificationsLoading, error: notificationsError, loadNotifications } = useNotificationStore()
-//
+const {
+  notifications,
+  unreadCount,
+  isLoading: isNotificationsLoading,
+  error: notificationsError,
+  loadNotifications,
+  loadUnreadCount
+} = useNotificationStore()
 let timerId
 const formattedDate = computed(() => {
   return new Intl.DateTimeFormat(locale.value, {
@@ -104,6 +110,7 @@ onMounted(() => {
 
   if (isAuthenticated.value) {
     loadProfile(profileId)
+    loadUnreadCount()
   }
 })
 
@@ -152,18 +159,22 @@ onUnmounted(() => {
           <span class="topbar__greeting">{{ t('app.greeting') }}, <strong>{{ displayName }}</strong></span>
           <div class="notifications">
             <button
-              class="icon-button"
-              type="button"
-              :aria-label="t('app.notifications')"
-              :aria-expanded="isNotificationsOpen"
-              @click="toggleNotifications"
+                class="icon-button"
+                type="button"
+                :aria-label="t('app.notifications')"
+                :aria-expanded="isNotificationsOpen"
+                @click="toggleNotifications"
             >
               <svg class="icon-bell" viewBox="0 0 24 24" aria-hidden="true">
                 <path
-                  d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2Z"
-                  fill="currentColor"
+                    d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2Z"
+                    fill="currentColor"
                 />
               </svg>
+
+              <span v-if="unreadCount > 0" class="notifications-badge">
+    {{ unreadCount }}
+  </span>
             </button>
             <div v-if="isNotificationsOpen" class="notifications-overlay" @click="onOverlayClick">
               <div class="notifications-panel" role="dialog" aria-live="polite">
@@ -511,6 +522,26 @@ onUnmounted(() => {
 
 .content__body {
   min-height: calc(100vh - 88px);
+}
+.notifications .icon-button {
+  position: relative;
+}
+
+.notifications-badge {
+  align-items: center;
+  background: #ef4444;
+  border-radius: 999px;
+  color: #ffffff;
+  display: flex;
+  font-size: 0.65rem;
+  font-weight: 700;
+  height: 1rem;
+  justify-content: center;
+  min-width: 1rem;
+  padding: 0 0.25rem;
+  position: absolute;
+  right: -0.25rem;
+  top: -0.25rem;
 }
 </style>
 

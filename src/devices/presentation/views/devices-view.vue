@@ -91,6 +91,7 @@
         :save-error="saveError"
         @close="closeSettings"
         @save="handleUpdateDevice"
+        @delete="handleDeleteDevice"
     />
   </section>
 </template>
@@ -114,9 +115,9 @@ const {
   saveError,
   loadDevices,
   addDevice,
-  updateDevice
+  saveDevice,
+  removeDevice
 } = useDeviceStore()
-
 const isPreferencesOpen = ref(false)
 const isAddDeviceOpen = ref(false)
 const isSettingsOpen = ref(false)
@@ -152,12 +153,22 @@ const handleAddDevice = async (payload) => {
   await addDevice(payload)
   closeAddDevice()
 }
-
 const handleUpdateDevice = async ({ id, updates }) => {
-  await updateDevice(id, updates)
+  await saveDevice(id, updates)
   closeSettings()
 }
+const handleDeleteDevice = async (id) => {
+  const confirmed = window.confirm('¿Seguro que deseas eliminar este dispositivo?')
 
+  if (!confirmed) return
+
+  try {
+    await removeDevice(id)
+    closeSettings()
+  } catch (error) {
+    console.error('Error al eliminar dispositivo:', error)
+  }
+}
 onMounted(() => {
   loadDevices()
 })
