@@ -5,6 +5,7 @@ const STORAGE_KEY = 'hydrosmart.session'
 
 const isAuthenticated = ref(false)
 const currentUser = ref('')
+const currentUserId = ref(null)
 const authError = ref('')
 
 const getStorage = () => {
@@ -77,12 +78,15 @@ const applySession = (data) => {
   currentUser.value = session.name
 
   saveSession(session)
+  isAuthenticated.value = true
+  currentUser.value = session.email
+  currentUserId.value = session.id
 
   return session
 }
 
 const restoreSession = () => {
-  const session = loadSession()
+  const session = readSession()
 
   if (!session || !session.token) {
     clearSession()
@@ -90,7 +94,10 @@ const restoreSession = () => {
   }
 
   isAuthenticated.value = true
-  currentUser.value = session.name || session.email
+  currentUser.value = session.email || ''
+  currentUserId.value = session.id ?? null
+  localStorage.setItem('authToken', session.token)
+  localStorage.setItem('token', session.token)
 }
 
 restoreSession()
@@ -162,15 +169,18 @@ export function useAuthStore() {
   }
 
   const logout = async () => {
+    await logoutRequest()
+    clearSession()
     isAuthenticated.value = false
     currentUser.value = ''
+    currentUserId.value = null
     authError.value = ''
-    clearSession()
   }
 
   return {
     isAuthenticated,
     currentUser,
+    currentUserId,
     authError,
     login,
     register,

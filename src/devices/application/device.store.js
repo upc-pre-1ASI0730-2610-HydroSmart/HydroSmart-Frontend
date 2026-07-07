@@ -48,7 +48,7 @@ export function useDeviceStore() {
         }
     }
 
-    const saveDevice = async (id, updates) => {
+    const updateDevice = async (id, updates) => {
         isSaving.value = true
         saveError.value = ''
 
