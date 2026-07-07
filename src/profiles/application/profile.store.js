@@ -48,7 +48,7 @@ export function useProfileStore() {
   }
 
   const saveProfile = async (id, updates) => {
-    if (!id) {
+    if (!id || !profile.value) {
       return
     }
 
@@ -56,9 +56,19 @@ export function useProfileStore() {
     saveError.value = ''
 
     try {
-      const apiModel = await updateProfileById(id, updates)
+      const mergedProfile = {
+        ...profile.value,
+        ...updates,
+        profilePhotoUrl: updates.profilePhotoUrl ?? profile.value.profilePhotoUrl
+      }
+
+      const payload = toApiModel(mergedProfile)
+
+      const apiModel = await updateProfileById(id, payload)
+
       profile.value = toProfile(apiModel)
       lastLoadedId.value = id
+
       return profile.value
     } catch (err) {
       saveError.value = err instanceof Error ? err.message : 'Error al guardar el perfil'

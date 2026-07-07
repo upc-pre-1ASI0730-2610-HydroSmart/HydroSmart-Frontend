@@ -6,7 +6,9 @@
         <div class="metric-card__icon">💧</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.waterConsumption') }}</p>
-          <p class="metric-card__value">{{ dashboard.monthlyConsumptionLiters }} {{ t('app.unit.liters') }}</p>
+          <p class="metric-card__value">
+            {{ dashboard.monthlyConsumptionLiters }} {{ t('app.unit.liters') }}
+          </p>
           <p class="metric-card__subtitle">{{ t('dashboard.monthlySavingGoal') }}</p>
         </div>
       </div>
@@ -24,8 +26,12 @@
         <div class="metric-card__icon">⚙️</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.activeDevices') }}</p>
-          <p class="metric-card__value">5 {{ t('app.devices') }}</p>
-          <p class="metric-card__subtitle">&nbsp;</p>
+          <p class="metric-card__value">
+            {{ devicesCount }} {{ t('app.devices') }}
+          </p>
+          <p class="metric-card__subtitle">
+            {{ activeDevicesCount }} {{ t('devices.active') }}
+          </p>
         </div>
       </div>
 
@@ -42,7 +48,9 @@
         <div class="metric-card__icon">📊</div>
         <div class="metric-card__content">
           <p class="metric-card__label">{{ t('dashboard.todayConsumption') }}</p>
-          <p class="metric-card__value">{{ dashboard.todayConsumptionLiters }} {{ t('app.unit.liters') }}</p>
+          <p class="metric-card__value">
+            {{ dashboard.todayConsumptionLiters }} {{ t('app.unit.liters') }}
+          </p>
           <p class="metric-card__subtitle">&nbsp;</p>
         </div>
       </div>
@@ -80,6 +88,7 @@
       <!-- Alerts Section -->
       <div class="alerts-container">
         <h3 class="alerts-title">{{ t('dashboard.alerts') }}</h3>
+
         <div class="alerts-list">
           <div class="alert-item alert-item--warning">
             <span class="alert-icon">⚠️</span>
@@ -88,6 +97,7 @@
               <p class="alert-message">{{ t('dashboard.highConsumptionMessage') }}</p>
             </div>
           </div>
+
           <div class="alert-item alert-item--warning">
             <span class="alert-icon">⚠️</span>
             <div class="alert-content">
@@ -95,11 +105,14 @@
               <p class="alert-message">{{ t('dashboard.reminderMessage') }}</p>
             </div>
           </div>
+
           <div class="alert-item alert-item--warning">
             <span class="alert-icon">⚠️</span>
             <div class="alert-content">
               <p class="alert-heading">Posible fuga detectada</p>
-              <p class="alert-message">Se ha detectado un patrón de consumo anormal en el Inodoro 2. Verifica si hay fugas de agua.</p>
+              <p class="alert-message">
+                Se ha detectado un patrón de consumo anormal. Verifica si hay fugas de agua.
+              </p>
             </div>
           </div>
         </div>
@@ -108,12 +121,35 @@
       <!-- My Devices Section -->
       <div class="devices-container">
         <h3 class="devices-title">{{ t('dashboard.myDevices') }}</h3>
-        <div class="devices-list">
-          <div v-for="device in myDevices" :key="device.id" class="device-item" :class="{ 'is-active': device.active }">
+
+        <p v-if="devicesLoading" class="devices-message">
+          Cargando dispositivos...
+        </p>
+
+        <p v-else-if="devicesError" class="devices-message devices-message--error">
+          {{ devicesError }}
+        </p>
+
+        <p v-else-if="myDevices.length === 0" class="devices-message">
+          No hay dispositivos registrados.
+        </p>
+
+        <div v-else class="devices-list">
+          <div
+              v-for="device in myDevices"
+              :key="device.id"
+              class="device-item"
+              :class="{ 'is-active': device.active }"
+          >
             <span class="device-icon">{{ device.icon }}</span>
+
             <div class="device-info">
               <p class="device-name">{{ device.name }}</p>
-              <p class="device-status" :class="{ 'is-active': device.active, 'is-inactive': !device.active }">
+
+              <p
+                  class="device-status"
+                  :class="{ 'is-active': device.active, 'is-inactive': !device.active }"
+              >
                 {{ device.active ? t('devices.active') : t('devices.inactive') }}
               </p>
             </div>
@@ -125,39 +161,75 @@
 </template>
 
 <script setup>
+import { computed, nextTick, onBeforeUnmount, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { onMounted } from 'vue'
 import Chart from 'chart.js/auto'
+
 import { useAnalyticsStore } from '../../application/analytics.store.js'
+import { useDeviceStore } from '@/devices/application/device.store.js'
 
 const { t } = useI18n()
+
 const { dashboard, loadDashboard } = useAnalyticsStore()
+
+const {
+  devices,
+  loadDevices,
+  isLoading: devicesLoading,
+  error: devicesError
+} = useDeviceStore()
+
 const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
 
 let dailyChart = null
 let categoryChart = null
 let monthlyChart = null
 
-const myDevices = [
-  {
-    id: 1,
-    icon: '🚽',
-    name: 'Inodoro 2',
-    active: true
-  },
-  {
-    id: 2,
-    icon: '🚿',
-    name: t('dashboard.devices.shower3'),
-    active: false
-  },
-  {
-    id: 3,
-    icon: '🚰',
-    name: t('dashboard.devices.kitchenFaucet1'),
-    active: false
+const devicesCount = computed(() => devices.value.length)
+
+const activeDevicesCount = computed(() =>
+    devices.value.filter((device) => device.isActive).length
+)
+
+const getDeviceIcon = (device) => {
+  const name = String(device.name || '').toLowerCase()
+  const section = String(device.section || '').toLowerCase()
+
+  if (name.includes('toilet') || name.includes('inodoro')) return '🚽'
+  if (name.includes('shower') || name.includes('ducha')) return '🚿'
+  if (name.includes('sink') || name.includes('faucet') || name.includes('lavadero')) return '🚰'
+  if (section.includes('garden') || section.includes('jardín')) return '🌿'
+  if (section.includes('kitchen') || section.includes('cocina')) return '🚰'
+  if (section.includes('bathroom') || section.includes('baño')) return '🚿'
+
+  return '💧'
+}
+
+const myDevices = computed(() =>
+    devices.value.map((device) => ({
+      id: device.id,
+      icon: getDeviceIcon(device),
+      name: device.name,
+      active: device.isActive
+    }))
+)
+
+const destroyCharts = () => {
+  if (dailyChart) {
+    dailyChart.destroy()
+    dailyChart = null
   }
-]
+
+  if (categoryChart) {
+    categoryChart.destroy()
+    categoryChart = null
+  }
+
+  if (monthlyChart) {
+    monthlyChart.destroy()
+    monthlyChart = null
+  }
+}
 
 const initializeDailyConsumptionChart = () => {
   const ctx = document.getElementById('dailyConsumptionChart')
@@ -167,7 +239,7 @@ const initializeDailyConsumptionChart = () => {
     dailyChart.destroy()
   }
 
-  const daily = dashboard.value.dailyConsumption
+  const daily = dashboard.value.dailyConsumption || []
 
   dailyChart = new Chart(ctx, {
     type: 'line',
@@ -206,7 +278,7 @@ const initializeDailyConsumptionChart = () => {
           beginAtZero: true,
           ticks: {
             stepSize: 20,
-            callback: function(value) {
+            callback(value) {
               return value + ' L'
             },
             font: {
@@ -240,7 +312,7 @@ const initializeCategoryConsumptionChart = () => {
     categoryChart.destroy()
   }
 
-  const breakdown = dashboard.value.categoryBreakdown
+  const breakdown = dashboard.value.categoryBreakdown || []
 
   categoryChart = new Chart(ctx, {
     type: 'doughnut',
@@ -282,7 +354,7 @@ const initializeMonthlyConsumptionChart = () => {
     monthlyChart.destroy()
   }
 
-  const monthly = dashboard.value.monthlyComparison
+  const monthly = dashboard.value.monthlyComparison || []
 
   monthlyChart = new Chart(ctx, {
     type: 'bar',
@@ -310,7 +382,7 @@ const initializeMonthlyConsumptionChart = () => {
         y: {
           beginAtZero: true,
           ticks: {
-            callback: function(value) {
+            callback(value) {
               return value + ' L'
             },
             font: {
@@ -336,11 +408,24 @@ const initializeMonthlyConsumptionChart = () => {
   })
 }
 
-onMounted(async () => {
-  await loadDashboard(profileId)
+const initializeCharts = () => {
   initializeDailyConsumptionChart()
   initializeCategoryConsumptionChart()
   initializeMonthlyConsumptionChart()
+}
+
+onMounted(async () => {
+  await Promise.all([
+    loadDashboard(profileId),
+    loadDevices()
+  ])
+
+  await nextTick()
+  initializeCharts()
+})
+
+onBeforeUnmount(() => {
+  destroyCharts()
 })
 </script>
 
@@ -558,6 +643,16 @@ onMounted(async () => {
   font-weight: 700;
   color: #0f172a;
   margin: 0 0 1rem;
+}
+
+.devices-message {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.devices-message--error {
+  color: #dc2626;
 }
 
 .devices-list {

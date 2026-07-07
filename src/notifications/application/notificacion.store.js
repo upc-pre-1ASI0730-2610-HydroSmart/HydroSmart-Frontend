@@ -10,7 +10,8 @@ import {
   markNotificationAsUnread,
   deleteNotification
 } from '../infrastructure/notifications-api.js'
-import { toNotification, toApiModel } from '../infrastructure/notification.assembler.js'
+
+import { toNotification } from '../infrastructure/notification.assembler.js'
 
 const notifications = ref([])
 const unreadNotifications = ref([])
@@ -20,13 +21,33 @@ const isLoading = ref(false)
 const error = ref('')
 const isUpdating = ref(false)
 
+const getCurrentUserId = () => {
+  try {
+    const rawSession = localStorage.getItem('hydrosmart.session')
+
+    if (rawSession) {
+      const session = JSON.parse(rawSession)
+
+      if (session?.id) {
+        return Number(session.id)
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  return Number(import.meta.env.VITE_PROFILE_ID) || 1
+}
+
 export function useNotificationStore() {
   const loadNotificationsByUser = async (userId) => {
+    const finalUserId = Number(userId) || getCurrentUserId()
+
     isLoading.value = true
     error.value = ''
 
     try {
-      const data = await fetchNotificationsByUserId(userId)
+      const data = await fetchNotificationsByUserId(finalUserId)
       notifications.value = Array.isArray(data) ? data.map(toNotification) : []
     } catch (err) {
       notifications.value = []
@@ -36,12 +57,18 @@ export function useNotificationStore() {
     }
   }
 
+  const loadNotifications = async () => {
+    await loadNotificationsByUser(getCurrentUserId())
+  }
+
   const loadUnreadNotifications = async (userId) => {
+    const finalUserId = Number(userId) || getCurrentUserId()
+
     isLoading.value = true
     error.value = ''
 
     try {
-      const data = await fetchUnreadNotificationsByUserId(userId)
+      const data = await fetchUnreadNotificationsByUserId(finalUserId)
       unreadNotifications.value = Array.isArray(data) ? data.map(toNotification) : []
     } catch (err) {
       unreadNotifications.value = []
@@ -52,8 +79,10 @@ export function useNotificationStore() {
   }
 
   const loadUnreadCount = async (userId) => {
+    const finalUserId = Number(userId) || getCurrentUserId()
+
     try {
-      const count = await fetchUnreadNotificationCount(userId)
+      const count = await fetchUnreadNotificationCount(finalUserId)
       unreadCount.value = Number(count) || 0
     } catch (err) {
       unreadCount.value = 0
@@ -83,7 +112,14 @@ export function useNotificationStore() {
     try {
       const data = await createNotification(notificationData)
       const newNotification = toNotification(data)
+
       notifications.value.unshift(newNotification)
+
+      if (!newNotification.isRead) {
+        unreadNotifications.value.unshift(newNotification)
+        unreadCount.value += 1
+      }
+
       return newNotification
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Error al crear la notificación'
@@ -101,26 +137,22 @@ export function useNotificationStore() {
       const data = await markNotificationAsRead(id)
       const updatedNotification = toNotification(data)
 
-      // Actualizar en el array de notificaciones
-      const index = notifications.value.findIndex(n => n.id === id)
+      const index = notifications.value.findIndex((n) => n.id === id)
       if (index !== -1) {
         notifications.value[index] = updatedNotification
       }
 
-      // Actualizar en el array de no leídas
-      const unreadIndex = unreadNotifications.value.findIndex(n => n.id === id)
+      const unreadIndex = unreadNotifications.value.findIndex((n) => n.id === id)
       if (unreadIndex !== -1) {
         unreadNotifications.value.splice(unreadIndex, 1)
       }
 
-      // Actualizar notificación actual
       if (currentNotification.value?.id === id) {
         currentNotification.value = updatedNotification
       }
 
-      // Actualizar conteo
       if (unreadCount.value > 0) {
-        unreadCount.value--
+        unreadCount.value -= 1
       }
 
       return updatedNotification
@@ -140,24 +172,20 @@ export function useNotificationStore() {
       const data = await markNotificationAsUnread(id)
       const updatedNotification = toNotification(data)
 
-      // Actualizar en el array de notificaciones
-      const index = notifications.value.findIndex(n => n.id === id)
+      const index = notifications.value.findIndex((n) => n.id === id)
       if (index !== -1) {
         notifications.value[index] = updatedNotification
       }
 
-      // Agregar a no leídas si no está
-      if (!unreadNotifications.value.find(n => n.id === id)) {
+      if (!unreadNotifications.value.find((n) => n.id === id)) {
         unreadNotifications.value.unshift(updatedNotification)
       }
 
-      // Actualizar notificación actual
       if (currentNotification.value?.id === id) {
         currentNotification.value = updatedNotification
       }
 
-      // Actualizar conteo
-      unreadCount.value++
+      unreadCount.value += 1
 
       return updatedNotification
     } catch (err) {
@@ -175,20 +203,20 @@ export function useNotificationStore() {
     try {
       await deleteNotification(id)
 
-      // Eliminar del array de notificaciones
-      const index = notifications.value.findIndex(n => n.id === id)
+      const index = notifications.value.findIndex((n) => n.id === id)
       if (index !== -1) {
         notifications.value.splice(index, 1)
       }
 
-      // Eliminar del array de no leídas
-      const unreadIndex = unreadNotifications.value.findIndex(n => n.id === id)
+      const unreadIndex = unreadNotifications.value.findIndex((n) => n.id === id)
       if (unreadIndex !== -1) {
         unreadNotifications.value.splice(unreadIndex, 1)
-        unreadCount.value--
+
+        if (unreadCount.value > 0) {
+          unreadCount.value -= 1
+        }
       }
 
-      // Limpiar notificación actual si es la que se eliminó
       if (currentNotification.value?.id === id) {
         currentNotification.value = null
       }
@@ -218,6 +246,7 @@ export function useNotificationStore() {
     isLoading,
     error,
     isUpdating,
+    loadNotifications,
     loadNotificationsByUser,
     loadUnreadNotifications,
     loadUnreadCount,
@@ -229,4 +258,3 @@ export function useNotificationStore() {
     clearNotifications
   }
 }
-

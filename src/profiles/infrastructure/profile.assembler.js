@@ -22,11 +22,12 @@ export function toApiModel(profile) {
   if (!profile) return null
 
   return {
+    id: profile.id ?? 0,
+    photoUrl: profile.profilePhotoUrl ?? '',
     firstName: profile.firstName ?? '',
     lastName: profile.lastName ?? '',
-    email: profile.email ?? '',
     address: profile.address ?? '',
-    phoneNumber: profile.phoneNumber ?? '',
-    photoUrl: profile.profilePhotoUrl ?? ''
+    email: profile.email ?? '',
+    phoneNumber: profile.phoneNumber ?? ''
   }
 }

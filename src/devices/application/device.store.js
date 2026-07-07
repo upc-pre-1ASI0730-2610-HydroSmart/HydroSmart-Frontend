@@ -2,7 +2,12 @@ import { ref } from 'vue'
 
 
 import { toDevice } from '../infrastructure/device.assembler.js'
-import {fetchDevices} from "@/devices/infrastructure/device-api.js";
+import {
+    fetchDevices,
+    createDevice,
+    updateDeviceById,
+    deleteDeviceById
+} from '@/devices/infrastructure/device-api.js'
 
 const devices = ref([])
 const isLoading = ref(false)
@@ -63,6 +68,23 @@ export function useDeviceStore() {
             isSaving.value = false
         }
     }
+    const removeDevice = async (id) => {
+        isSaving.value = true
+        saveError.value = ''
+
+        try {
+            await deleteDeviceById(id)
+
+            devices.value = devices.value.filter((device) => device.id !== id)
+
+            return true
+        } catch (err) {
+            saveError.value = err instanceof Error ? err.message : 'Error al eliminar dispositivo'
+            throw err
+        } finally {
+            isSaving.value = false
+        }
+    }
 
     return {
         devices,
@@ -72,6 +94,7 @@ export function useDeviceStore() {
         saveError,
         loadDevices,
         addDevice,
-        saveDevice
+        saveDevice,
+        removeDevice
     }
 }
