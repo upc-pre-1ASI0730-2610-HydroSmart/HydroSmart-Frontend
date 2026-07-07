@@ -94,7 +94,7 @@ export function useDeviceStore() {
         saveError,
         loadDevices,
         addDevice,
-        saveDevice,
+        saveDevice: updateDevice,
         removeDevice
     }
 }

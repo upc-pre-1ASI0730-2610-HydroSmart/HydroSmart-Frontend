@@ -1,19 +1,15 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001'
-
-const buildUrl = (path) => {
-  return `${API_BASE_URL}${path}`
-}
+import { buildApiUrl } from '@/shared/infrastructure/api-config.js'
 
 const extractTokenFromResponse = (data) => {
   if (!data) return null
   return (
-    data.token ||
-    data.accessToken ||
-    data.access_token ||
-    data.jwtToken ||
-    data.jwt ||
-    (data.data && (data.data.token || data.data.accessToken || data.data.access_token)) ||
-    null
+      data.token ||
+      data.accessToken ||
+      data.access_token ||
+      data.jwtToken ||
+      data.jwt ||
+      (data.data && (data.data.token || data.data.accessToken || data.data.access_token)) ||
+      null
   )
 }
 
