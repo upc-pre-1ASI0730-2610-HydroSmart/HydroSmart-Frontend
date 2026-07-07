@@ -1,144 +1,75 @@
 import { ref } from 'vue'
 
-const STORAGE_KEYS = {
-  users: 'hydrosmart.mockUsers',
-  session: 'hydrosmart.mockSession'
-}
+import { logout as logoutRequest, signIn, signUp } from '../infrastructure/auth-api.js'
 
-const DEFAULT_USER = {
-  id: 'mock-admin-1',
-  email: 'admin123@gmail.com',
-  password: 'admin123',
-  role: 'admin',
-  name: 'Administrador HydroSmart'
-}
+const SESSION_KEY = 'hydrosmart.session'
 
 const isAuthenticated = ref(false)
 const currentUser = ref('')
+const currentUserId = ref(null)
 const authError = ref('')
 
-const getStorage = () => {
-  if (typeof window === 'undefined') {
+const readSession = () => {
+  const rawSession = localStorage.getItem(SESSION_KEY)
+
+  if (!rawSession) {
     return null
   }
 
-  return window.localStorage
-}
-
-const createDisplayName = (email) => {
-  const localPart = String(email || '')
-    .split('@')[0]
-    .replace(/[._-]+/g, ' ')
-    .trim()
-
-  if (!localPart) {
-    return 'Usuario HydroSmart'
-  }
-
-  return localPart
-    .split(' ')
-    .map((part) => part ? part.charAt(0).toUpperCase() + part.slice(1) : '')
-    .join(' ')
-}
-
-const createMockToken = (email) => {
-  return `mock-${String(email || '').toLowerCase()}-${Date.now()}`
-}
-
-const readJson = (storage, key, fallback) => {
-  if (!storage) {
-    return fallback
-  }
-
-  const raw = storage.getItem(key)
-  if (!raw) {
-    return fallback
-  }
-
   try {
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : fallback
-  } catch (error) {
-    return fallback
+    return JSON.parse(rawSession)
+  } catch {
+    return null
   }
-}
-
-const writeJson = (storage, key, value) => {
-  if (!storage) {
-    return
-  }
-
-  storage.setItem(key, JSON.stringify(value))
-}
-
-const ensureSeedUsers = (users) => {
-  const normalized = Array.isArray(users) ? users : []
-  const hasDefaultUser = normalized.some((user) => String(user.email || '').toLowerCase() === DEFAULT_USER.email)
-
-  if (!hasDefaultUser) {
-    normalized.unshift({ ...DEFAULT_USER })
-  }
-
-  return normalized
-}
-
-const loadUsers = () => {
-  const storage = getStorage()
-  const users = ensureSeedUsers(readJson(storage, STORAGE_KEYS.users, []))
-  writeJson(storage, STORAGE_KEYS.users, users)
-  return users
-}
-
-const saveUsers = (users) => {
-  const storage = getStorage()
-  writeJson(storage, STORAGE_KEYS.users, ensureSeedUsers(users))
-}
-
-const loadSession = () => {
-  const storage = getStorage()
-  return readJson(storage, STORAGE_KEYS.session, null)
 }
 
 const saveSession = (session) => {
-  const storage = getStorage()
-  writeJson(storage, STORAGE_KEYS.session, session)
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  localStorage.setItem('authToken', session.token)
+  localStorage.setItem('token', session.token)
 }
 
 const clearSession = () => {
-  const storage = getStorage()
-  if (!storage) {
-    return
-  }
-
-  storage.removeItem(STORAGE_KEYS.session)
+  localStorage.removeItem(SESSION_KEY)
+  localStorage.removeItem('authToken')
+  localStorage.removeItem('token')
 }
 
-const setAuthenticatedUser = (user) => {
-  const session = {
-    token: createMockToken(user.email),
-    id: user.id,
-    email: user.email,
-    role: user.role,
-    name: user.name,
-    loginAt: new Date().toISOString()
+const applySession = (data, fallbackEmail = '') => {
+  const token = data?.token || data?.accessToken || data?.access_token
+
+  if (!token) {
+    throw new Error('El backend no devolvio un token de autenticacion')
   }
 
-  isAuthenticated.value = true
-  currentUser.value = user.name || user.email
+  const session = {
+    id: data?.id ?? null,
+    email: data?.email ?? fallbackEmail,
+    role: data?.role ?? 'user',
+    token
+  }
+
   saveSession(session)
+  isAuthenticated.value = true
+  currentUser.value = session.email
+  currentUserId.value = session.id
 
   return session
 }
 
 const restoreSession = () => {
-  const session = loadSession()
+  const session = readSession()
 
-  if (!session || !session.email) {
+  if (!session?.token) {
+    clearSession()
     return
   }
 
   isAuthenticated.value = true
-  currentUser.value = session.name || session.email
+  currentUser.value = session.email || ''
+  currentUserId.value = session.id ?? null
+  localStorage.setItem('authToken', session.token)
+  localStorage.setItem('token', session.token)
 }
 
 restoreSession()
@@ -147,33 +78,25 @@ export function useAuthStore() {
   const login = async ({ email, password }) => {
     authError.value = ''
 
-    const normalizedEmail = String(email || '').trim().toLowerCase()
-    const normalizedPassword = String(password || '').trim()
-    const users = loadUsers()
-    const matchedUser = users.find((user) => {
-      return String(user.email || '').toLowerCase() === normalizedEmail && String(user.password || '') === normalizedPassword
-    })
+    try {
+      const data = await signIn({ email, password })
+      const session = applySession(data, email)
 
-    if (!matchedUser) {
+      return {
+        success: true,
+        message: '',
+        user: session
+      }
+    } catch (error) {
+      clearSession()
       isAuthenticated.value = false
       currentUser.value = ''
-      authError.value = 'Usuario o contrasena incorrectos.'
+      currentUserId.value = null
+      authError.value = error instanceof Error ? error.message : 'Usuario o contrasena incorrectos.'
 
       return {
         success: false,
         message: authError.value
-      }
-    }
-
-    setAuthenticatedUser(matchedUser)
-
-    return {
-      success: true,
-      message: '',
-      user: {
-        email: matchedUser.email,
-        role: matchedUser.role,
-        name: matchedUser.name
       }
     }
   }
@@ -181,69 +104,43 @@ export function useAuthStore() {
   const register = async ({ email, password, role = 'user' }) => {
     authError.value = ''
 
-    const normalizedEmail = String(email || '').trim().toLowerCase()
-    const normalizedPassword = String(password || '').trim()
+    try {
+      await signUp({ email, password, role })
+      const data = await signIn({ email, password })
+      const session = applySession(data, email)
 
-    if (!normalizedEmail) {
-      authError.value = 'El correo electrónico es obligatorio.'
+      return {
+        success: true,
+        message: '',
+        user: session
+      }
+    } catch (error) {
+      clearSession()
+      isAuthenticated.value = false
+      currentUser.value = ''
+      currentUserId.value = null
+      authError.value = error instanceof Error ? error.message : 'Error al crear la cuenta.'
+
       return {
         success: false,
         message: authError.value
-      }
-    }
-
-    if (normalizedPassword.length < 6) {
-      authError.value = 'La contraseña debe tener al menos 6 caracteres.'
-      return {
-        success: false,
-        message: authError.value
-      }
-    }
-
-    const users = loadUsers()
-    const alreadyExists = users.some((user) => String(user.email || '').toLowerCase() === normalizedEmail)
-
-    if (alreadyExists) {
-      authError.value = 'Ya existe una cuenta con ese correo.'
-      return {
-        success: false,
-        message: authError.value
-      }
-    }
-
-    const newUser = {
-      id: `mock-${Date.now()}`,
-      email: normalizedEmail,
-      password: normalizedPassword,
-      role,
-      name: createDisplayName(normalizedEmail)
-    }
-
-    users.unshift(newUser)
-    saveUsers(users)
-    setAuthenticatedUser(newUser)
-
-    return {
-      success: true,
-      message: 'Registro exitoso',
-      user: {
-        email: newUser.email,
-        role: newUser.role,
-        name: newUser.name
       }
     }
   }
 
   const logout = async () => {
+    await logoutRequest()
+    clearSession()
     isAuthenticated.value = false
     currentUser.value = ''
+    currentUserId.value = null
     authError.value = ''
-    clearSession()
   }
 
   return {
     isAuthenticated,
     currentUser,
+    currentUserId,
     authError,
     login,
     register,

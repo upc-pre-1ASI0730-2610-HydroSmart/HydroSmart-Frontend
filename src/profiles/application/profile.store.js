@@ -47,6 +47,40 @@ export function useProfileStore() {
     }
   }
 
+  const loadProfileByUserId = async (userId) => {
+    const numericId = Number(userId)
+
+    if (!numericId) {
+      profile.value = null
+      error.value = 'Usuario no identificado'
+      return
+    }
+
+    isLoading.value = true
+    error.value = ''
+
+    try {
+      const apiModels = await fetchAllProfiles()
+      const matchedProfile = Array.isArray(apiModels)
+        ? apiModels.find((apiModel) => Number(apiModel.userId) === numericId)
+        : null
+
+      if (!matchedProfile) {
+        profile.value = null
+        error.value = 'Perfil no encontrado'
+        return
+      }
+
+      profile.value = toProfile(matchedProfile)
+      lastLoadedId.value = profile.value.id
+    } catch (err) {
+      profile.value = null
+      error.value = err instanceof Error ? err.message : 'Error al cargar el perfil'
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const saveProfile = async (id, updates) => {
     if (!id) {
       return
@@ -56,7 +90,12 @@ export function useProfileStore() {
     saveError.value = ''
 
     try {
-      const apiModel = await updateProfileById(id, updates)
+      const profileUpdates = toApiModel({
+        ...(profile.value ?? {}),
+        ...updates,
+        id
+      })
+      const apiModel = await updateProfileById(id, profileUpdates)
       profile.value = toProfile(apiModel)
       lastLoadedId.value = id
       return profile.value
@@ -76,6 +115,9 @@ export function useProfileStore() {
       const apiModel = await createProfile(profileData)
       const newProfile = toProfile(apiModel)
       profiles.value.push(newProfile)
+      profile.value = newProfile
+      lastLoadedId.value = newProfile.id
+      error.value = ''
       return newProfile
     } catch (err) {
       saveError.value = err instanceof Error ? err.message : 'Error al crear el perfil'
@@ -99,6 +141,7 @@ export function useProfileStore() {
     isSaving,
     saveError,
     loadProfile,
+    loadProfileByUserId,
     loadAllProfiles,
     saveProfile,
     addProfile,

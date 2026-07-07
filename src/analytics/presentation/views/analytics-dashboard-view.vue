@@ -129,10 +129,12 @@ import { useI18n } from 'vue-i18n'
 import { onMounted } from 'vue'
 import Chart from 'chart.js/auto'
 import { useAnalyticsStore } from '../../application/analytics.store.js'
+import { useAuthStore } from '@/auth/application/auth.store.js'
 
 const { t } = useI18n()
 const { dashboard, loadDashboard } = useAnalyticsStore()
-const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
+const { currentUserId } = useAuthStore()
+const dashboardUserId = Number(currentUserId.value || import.meta.env.VITE_PROFILE_ID) || 1
 
 let dailyChart = null
 let categoryChart = null
@@ -337,7 +339,7 @@ const initializeMonthlyConsumptionChart = () => {
 }
 
 onMounted(async () => {
-  await loadDashboard(profileId)
+  await loadDashboard(dashboardUserId)
   initializeDailyConsumptionChart()
   initializeCategoryConsumptionChart()
   initializeMonthlyConsumptionChart()

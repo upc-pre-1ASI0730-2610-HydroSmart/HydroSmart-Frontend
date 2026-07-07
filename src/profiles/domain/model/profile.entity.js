@@ -1,6 +1,7 @@
 export class Profile {
   constructor({
     id,
+    userId,
     username,
     email,
     firstName,
@@ -11,6 +12,7 @@ export class Profile {
     createdAt
   }) {
     this.id = id
+    this.userId = userId
     this.username = username
     this.email = email
     this.firstName = firstName
@@ -28,6 +30,7 @@ export class Profile {
   static empty() {
     return new Profile({
       id: null,
+      userId: null,
       username: '',
       email: '',
       firstName: '',

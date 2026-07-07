@@ -1,24 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || ''
-
-const buildUrl = (path) => {
-  return `${API_BASE_URL}${path}`
-}
-
-const getAuthToken = () => {
-  return localStorage.getItem('authToken')
-}
-
-const getHeaders = (isFormData = false) => {
-  const headers = {
-    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
-  }
-
-  if (!isFormData) {
-    headers['Content-Type'] = 'application/json'
-  }
-
-  return headers
-}
+import { buildApiUrl, getJsonHeaders } from '@/shared/infrastructure/api-config.js'
 
 export async function fetchProfileById(id) {
   const numericId = Number(id)
@@ -27,14 +7,10 @@ export async function fetchProfileById(id) {
     throw new Error('ID de perfil inválido')
   }
 
-  if (!API_BASE_URL) {
-    throw new Error('API base URL no configurada')
-  }
-
   try {
-    const response = await fetch(buildUrl(`/api/v1/profiles/${numericId}`), {
+    const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
       method: 'GET',
-      headers: getHeaders()
+      headers: getJsonHeaders()
     })
 
     if (!response.ok) {
@@ -51,14 +27,10 @@ export async function fetchProfileById(id) {
 }
 
 export async function fetchAllProfiles() {
-  if (!API_BASE_URL) {
-    throw new Error('API base URL no configurada')
-  }
-
   try {
-    const response = await fetch(buildUrl('/api/v1/profiles'), {
+    const response = await fetch(buildApiUrl('/api/v1/profiles'), {
       method: 'GET',
-      headers: getHeaders()
+      headers: getJsonHeaders()
     })
 
     if (!response.ok) {
@@ -72,14 +44,10 @@ export async function fetchAllProfiles() {
 }
 
 export async function createProfile(profileData) {
-  if (!API_BASE_URL) {
-    throw new Error('API base URL no configurada')
-  }
-
   try {
-    const response = await fetch(buildUrl('/api/v1/profiles'), {
+    const response = await fetch(buildApiUrl('/api/v1/profiles'), {
       method: 'POST',
-      headers: getHeaders(),
+      headers: getJsonHeaders(),
       body: JSON.stringify(profileData)
     })
 
@@ -103,14 +71,10 @@ export async function updateProfileById(id, updates) {
     throw new Error('ID de perfil inválido')
   }
 
-  if (!API_BASE_URL) {
-    throw new Error('API base URL no configurada')
-  }
-
   try {
-    const response = await fetch(buildUrl(`/api/v1/profiles/${numericId}`), {
+    const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
       method: 'PUT',
-      headers: getHeaders(),
+      headers: getJsonHeaders(),
       body: JSON.stringify(updates)
     })
 
