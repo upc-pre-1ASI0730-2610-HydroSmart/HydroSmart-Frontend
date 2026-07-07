@@ -64,6 +64,21 @@ export async function fetchProfileByUserId(userId) {
   return data
 }
 
+export async function fetchAllProfiles() {
+  const response = await fetch(buildApiUrl('/api/v1/profiles'), {
+    method: 'GET',
+    headers: getJsonHeaders()
+  })
+
+  const data = await readJsonOrText(response)
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || `Error al obtener perfiles (${response.status})`)
+  }
+
+  return data
+}
+
 export async function createProfile(profileData) {
   const response = await fetch(buildApiUrl('/api/v1/profiles'), {
     method: 'POST',
