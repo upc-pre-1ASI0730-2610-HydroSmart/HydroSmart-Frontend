@@ -1,5 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_REPORTS_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001';
-const buildUrl = (path) => `${API_BASE_URL}${path}`;
+import { buildApiUrl } from '@/shared/infrastructure/api-config.js'
+
+const buildUrl = (path) => buildApiUrl(path, 'VITE_REPORTS_API_BASE_URL');
 
 const getAuthToken = () => localStorage.getItem('authToken');
 

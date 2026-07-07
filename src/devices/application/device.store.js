@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 
 import { toDevice } from '../infrastructure/device.assembler.js'
-import {fetchDevices} from "@/devices/infrastructure/device-api.js";
+import { createDevice, fetchDevices, updateDeviceById } from "@/devices/infrastructure/device-api.js";
 
 const devices = ref([])
 const isLoading = ref(false)
@@ -43,7 +43,7 @@ export function useDeviceStore() {
         }
     }
 
-    const saveDevice = async (id, updates) => {
+    const updateDevice = async (id, updates) => {
         isSaving.value = true
         saveError.value = ''
 
@@ -72,6 +72,6 @@ export function useDeviceStore() {
         saveError,
         loadDevices,
         addDevice,
-        saveDevice
+        updateDevice
     }
 }

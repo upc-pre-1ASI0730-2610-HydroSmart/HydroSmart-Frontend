@@ -7,6 +7,7 @@ export function toProfile(apiModel) {
 
   return new Profile({
     id: Number(apiModel.id) || null,
+    userId: Number(apiModel.userId) || null,
     username: apiModel.username ?? `user_${apiModel.id}` ?? '',
     email: apiModel.email ?? '',
     firstName: apiModel.firstName ?? '',
@@ -22,6 +23,8 @@ export function toApiModel(profile) {
   if (!profile) return null
 
   return {
+    id: profile.id ?? null,
+    userId: profile.userId ?? null,
     firstName: profile.firstName ?? '',
     lastName: profile.lastName ?? '',
     email: profile.email ?? '',

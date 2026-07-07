@@ -12,17 +12,35 @@
         </div>
 
         <div v-if="isLoading" class="status">{{ t('profile.loading') }}</div>
-        <div v-else-if="error" class="status error">{{ error }}</div>
+        <div v-else-if="error && !isEditingInfo" class="status error">{{ error }}</div>
         <div v-else>
           <form class="card-fields" @submit.prevent>
             <div class="field">
-              <input class="field-input" type="text" :value="profile?.firstName" disabled />
+              <input
+                v-model.trim="form.firstName"
+                class="field-input"
+                type="text"
+                :disabled="!isEditingInfo"
+                placeholder="Nombre"
+              />
             </div>
             <div class="field">
-              <input class="field-input" type="text" :value="profile?.lastName" disabled />
+              <input
+                v-model.trim="form.lastName"
+                class="field-input"
+                type="text"
+                :disabled="!isEditingInfo"
+                placeholder="Apellido"
+              />
             </div>
             <div class="field">
-              <input class="field-input" type="email" :value="profile?.email" disabled />
+              <input
+                v-model.trim="form.email"
+                class="field-input"
+                type="email"
+                :disabled="!isEditingInfo"
+                placeholder="Correo"
+              />
             </div>
             <div class="field">
               <label class="field-label" for="address">{{ t('profile.address') }}</label>
@@ -55,10 +73,12 @@
 
       <div class="photo-card">
         <img
+          v-if="profile?.profilePhotoUrl"
           class="photo"
           :src="profile?.profilePhotoUrl"
           :alt="profile?.fullName || t('app.avatarAlt')"
         />
+        <div v-else class="photo photo-placeholder">{{ t('app.avatarAlt') }}</div>
         <button class="link-button" type="button" :disabled="isSaving" @click="openPhotoModal">
           {{ t('profile.editPhoto') }}
         </button>
@@ -72,12 +92,27 @@
           <button class="modal-close" type="button" @click="closePhotoModal">×</button>
         </header>
         <div class="modal-body">
+          <label class="field-label" for="photoFile">Seleccionar imagen</label>
+          <input
+            id="photoFile"
+            class="field-input"
+            type="file"
+            accept="image/*"
+            @change="onPhotoFileChange"
+          />
+          <p v-if="photoError" class="status error">{{ photoError }}</p>
+          <img
+            v-if="photoForm.profilePhotoUrl"
+            class="photo-preview"
+            :src="photoForm.profilePhotoUrl"
+            :alt="profile?.fullName || t('app.avatarAlt')"
+          />
           <label class="field-label" for="photoUrl">{{ t('profile.photoUrl') }}</label>
           <input
             id="photoUrl"
             v-model.trim="photoForm.profilePhotoUrl"
             class="field-input"
-            type="url"
+            type="text"
             :placeholder="t('profile.photoPlaceholder')"
           />
         </div>
@@ -99,12 +134,26 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useProfileStore } from '../../application/profile.store.js'
+import { useAuthStore } from '@/auth/application/auth.store.js'
 
 const { t } = useI18n()
-const { profile, isLoading, error, isSaving, saveError, loadProfile, saveProfile } = useProfileStore()
+const { currentUserId, currentUser } = useAuthStore()
+const {
+  profile,
+  isLoading,
+  error,
+  isSaving,
+  saveError,
+  loadProfileByUserId,
+  saveProfile,
+  addProfile
+} = useProfileStore()
 
-const profileId = Number(import.meta.env.VITE_PROFILE_ID) || 1
+const fallbackUserId = Number(import.meta.env.VITE_PROFILE_ID) || 1
 const form = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
   address: '',
   phoneNumber: ''
 })
@@ -112,10 +161,14 @@ const photoForm = reactive({
   profilePhotoUrl: ''
 })
 const saveSuccess = ref(false)
+const photoError = ref('')
 const isEditingInfo = ref(false)
 const isPhotoModalOpen = ref(false)
 
 const syncForm = () => {
+  form.firstName = profile.value?.firstName || ''
+  form.lastName = profile.value?.lastName || ''
+  form.email = profile.value?.email || currentUser.value || ''
   form.address = profile.value?.address || ''
   form.phoneNumber = profile.value?.phoneNumber || ''
   photoForm.profilePhotoUrl = profile.value?.profilePhotoUrl || ''
@@ -128,16 +181,25 @@ const toggleEditInfo = async () => {
     return
   }
 
-  if (!profile.value?.id) {
-    return
-  }
-
   saveSuccess.value = false
 
-  await saveProfile(profile.value.id, {
+  const payload = {
+    firstName: form.firstName,
+    lastName: form.lastName,
+    email: form.email || currentUser.value,
     address: form.address,
     phoneNumber: form.phoneNumber
-  })
+  }
+
+  if (profile.value?.id) {
+    await saveProfile(profile.value.id, payload)
+  } else {
+    await addProfile({
+      ...payload,
+      userId: Number(currentUserId.value) || fallbackUserId,
+      photoUrl: photoForm.profilePhotoUrl
+    })
+  }
 
   isEditingInfo.value = false
   saveSuccess.value = true
@@ -145,6 +207,7 @@ const toggleEditInfo = async () => {
 
 const openPhotoModal = () => {
   photoForm.profilePhotoUrl = profile.value?.profilePhotoUrl || ''
+  photoError.value = ''
   isPhotoModalOpen.value = true
   saveSuccess.value = false
 }
@@ -153,16 +216,59 @@ const closePhotoModal = () => {
   isPhotoModalOpen.value = false
 }
 
+const createProfilePayload = () => ({
+  userId: Number(currentUserId.value) || fallbackUserId,
+  firstName: form.firstName || 'Usuario',
+  lastName: form.lastName || 'HydroSmart',
+  email: form.email || currentUser.value,
+  address: form.address,
+  phoneNumber: form.phoneNumber,
+  photoUrl: photoForm.profilePhotoUrl
+})
+
+const onPhotoFileChange = (event) => {
+  const [file] = event.target.files || []
+
+  if (!file) {
+    return
+  }
+
+  if (!file.type.startsWith('image/')) {
+    photoError.value = 'Selecciona un archivo de imagen valido.'
+    return
+  }
+
+  if (file.size > 1024 * 1024) {
+    photoError.value = 'La imagen debe pesar menos de 1 MB.'
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = () => {
+    photoForm.profilePhotoUrl = String(reader.result || '')
+    photoError.value = ''
+  }
+  reader.onerror = () => {
+    photoError.value = 'No se pudo leer la imagen.'
+  }
+  reader.readAsDataURL(file)
+}
+
 const savePhoto = async () => {
-  if (!profile.value?.id) {
+  if (!photoForm.profilePhotoUrl) {
+    photoError.value = 'Selecciona una imagen o pega una URL.'
     return
   }
 
   saveSuccess.value = false
 
-  await saveProfile(profile.value.id, {
-    profilePhotoUrl: photoForm.profilePhotoUrl
-  })
+  if (profile.value?.id) {
+    await saveProfile(profile.value.id, {
+      profilePhotoUrl: photoForm.profilePhotoUrl
+    })
+  } else {
+    await addProfile(createProfilePayload())
+  }
 
   isPhotoModalOpen.value = false
   saveSuccess.value = true
@@ -177,7 +283,7 @@ watch(
 )
 
 onMounted(() => {
-  loadProfile(profileId)
+  loadProfileByUserId(Number(currentUserId.value) || fallbackUserId)
 })
 </script>
 
@@ -318,6 +424,24 @@ onMounted(() => {
   object-fit: cover;
   border-radius: 14px;
   background: #e5e7eb;
+}
+
+.photo-placeholder {
+  align-items: center;
+  color: #64748b;
+  display: flex;
+  font-weight: 600;
+  justify-content: center;
+  text-align: center;
+}
+
+.photo-preview {
+  aspect-ratio: 1 / 1;
+  background: #e5e7eb;
+  border-radius: 12px;
+  max-height: 180px;
+  object-fit: cover;
+  width: 100%;
 }
 
 .modal-overlay {
