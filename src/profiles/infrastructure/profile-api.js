@@ -1,23 +1,17 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001'
+import { buildApiUrl, getJsonHeaders } from '@/shared/infrastructure/api-config.js'
 
-const buildUrl = (path) => {
-  return `${API_BASE_URL}${path}`
-}
+const readJsonOrText = async (response) => {
+  const text = await response.text()
 
-const getAuthToken = () => {
-  return localStorage.getItem('authToken')
-}
+  if (!text) return null
 
-const getHeaders = (isFormData = false) => {
-  const headers = {
-    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
+  try {
+    return JSON.parse(text)
+  } catch {
+    return {
+      message: text
+    }
   }
-
-  if (!isFormData) {
-    headers['Content-Type'] = 'application/json'
-  }
-
-  return headers
 }
 
 export async function fetchProfileById(id) {
@@ -27,89 +21,83 @@ export async function fetchProfileById(id) {
     throw new Error('ID de perfil inválido')
   }
 
-  try {
-    const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
-      method: 'GET',
-      headers: getJsonHeaders()
-    })
+  const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
+    method: 'GET',
+    headers: getJsonHeaders()
+  })
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Perfil no encontrado')
-      }
-      throw new Error('Error al obtener el perfil')
+  const data = await readJsonOrText(response)
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error('Perfil no encontrado')
     }
 
-    return response.json()
-  } catch (error) {
-    throw error
+    throw new Error(data?.message || data?.error || `Error al obtener el perfil (${response.status})`)
   }
+
+  return data
 }
 
-export async function fetchAllProfiles() {
-  try {
-    const response = await fetch(buildApiUrl('/api/v1/profiles'), {
-      method: 'GET',
-      headers: getJsonHeaders()
-    })
+export async function fetchProfileByUserId(userId) {
+  const numericUserId = Number(userId)
 
-    if (!response.ok) {
-      throw new Error('Error al obtener los perfiles')
+  if (!numericUserId) {
+    throw new Error('ID de usuario inválido')
+  }
+
+  const response = await fetch(buildApiUrl(`/api/v1/users/${numericUserId}/profiles`), {
+    method: 'GET',
+    headers: getJsonHeaders()
+  })
+
+  const data = await readJsonOrText(response)
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error('Perfil no encontrado')
     }
 
-    return response.json()
-  } catch (error) {
-    throw error
+    throw new Error(data?.message || data?.error || `Error al obtener el perfil (${response.status})`)
   }
+
+  return data
 }
 
 export async function createProfile(profileData) {
-  try {
-    const response = await fetch(buildApiUrl('/api/v1/profiles'), {
-      method: 'POST',
-      headers: getJsonHeaders(),
-      body: JSON.stringify(profileData)
-    })
+  const response = await fetch(buildApiUrl('/api/v1/profiles'), {
+    method: 'POST',
+    headers: getJsonHeaders(),
+    body: JSON.stringify(profileData)
+  })
 
-    if (!response.ok) {
-      if (response.status === 400) {
-        throw new Error('Los datos del perfil no son válidos')
-      }
-      throw new Error('Error al crear el perfil')
-    }
+  const data = await readJsonOrText(response)
 
-    return response.json()
-  } catch (error) {
-    throw error
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || `Error al crear el perfil (${response.status})`)
   }
+
+  return data
 }
 
-export async function updateProfileById(id, updates) {
+export async function updateProfileById(id, profileData) {
   const numericId = Number(id)
 
   if (!numericId) {
     throw new Error('ID de perfil inválido')
   }
 
-  try {
-    const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
-      method: 'PUT',
-      headers: getJsonHeaders(),
-      body: JSON.stringify(updates)
-    })
+  const response = await fetch(buildApiUrl(`/api/v1/profiles/${numericId}`), {
+    method: 'PUT',
+    headers: getJsonHeaders(),
+    body: JSON.stringify(profileData)
+  })
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Perfil no encontrado')
-      }
-      if (response.status === 400) {
-        throw new Error('Los datos del perfil no son válidos')
-      }
-      throw new Error('Error al guardar el perfil')
-    }
+  const data = await readJsonOrText(response)
 
-    return response.json()
-  } catch (error) {
-    throw error
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || `Error al actualizar el perfil (${response.status})`)
   }
+
+  return data
 }

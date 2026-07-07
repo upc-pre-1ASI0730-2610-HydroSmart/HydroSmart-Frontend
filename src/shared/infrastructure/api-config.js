@@ -1,27 +1,26 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:5001'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:5001'
 
-export function getApiBaseUrl(...envKeys) {
-  const configuredUrl = envKeys
-    .map((key) => import.meta.env[key])
-    .find((value) => typeof value === 'string' && value.trim().length > 0)
-
-  return (configuredUrl || import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/$/, '')
+export const buildUrl = (path) => {
+    return `${API_BASE_URL}${path}`
 }
 
-export function buildApiUrl(path, ...envKeys) {
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${getApiBaseUrl(...envKeys)}${normalizedPath}`
+export const buildApiUrl = (path) => {
+    return `${API_BASE_URL}${path}`
 }
 
-export function getAuthToken() {
-  return localStorage.getItem('authToken') || localStorage.getItem('token')
+export const getAuthToken = () => {
+    return localStorage.getItem('authToken')
 }
 
-export function getJsonHeaders() {
-  const token = getAuthToken()
-
-  return {
+export const getJsonHeaders = () => ({
     'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` })
-  }
+    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
+})
+
+export const getAuthHeaders = () => ({
+    ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` })
+})
+
+export const getApiBaseUrl = () => {
+    return API_BASE_URL
 }
